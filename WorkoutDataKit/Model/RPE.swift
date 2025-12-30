@@ -14,19 +14,19 @@ public enum RPE {
     public static func title(_ rpe: Double) -> String? {
         switch rpe {
         case 7:
-            return "You could do 3 more repetitions."
+            return "あと3回できた"
         case 7.5:
-            return "You could do 2-3 more repetitions."
+            return "あと2〜3回できた"
         case 8:
-            return "You could do 2 more repetitions."
+            return "あと2回できた"
         case 8.5:
-            return "You could do 1-2 more repetitions."
+            return "あと1〜2回できた"
         case 9:
-            return "You could do 1 more repetitions."
+            return "あと1回できた"
         case 9.5:
-            return "You couldn't do any more repetitions, but possibly you could've increased the weight."
+            return "もうできなかったが、重量は増やせたかも"
         case 10:
-            return "You couldn't do any more repetitions."
+            return "限界まで追い込んだ"
         default:
             return nil
         }

@@ -232,7 +232,11 @@ struct Dragger : View {
                         self.wiggleDraggerToggle.toggle()
                     }
                 )
+                .accessibilityLabel("値を調整")
+                .accessibilityHint("上下にドラッグして値を変更")
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityValue("\(valueString ?? nilPlaceholder) \(unit)")
     }
 }
 

@@ -20,9 +20,9 @@ struct WorkoutDetailBannerView : View {
     private var bannerViewEntries: [BannerViewEntry] {
         var entries = [BannerViewEntry]()
 
-        entries.append(BannerViewEntry(id: 0, title: Text("Duration"), text: Text(Workout.durationFormatter.string(from: workout.safeDuration) ?? "")))
-        entries.append(BannerViewEntry(id: 1, title: Text("Sets"), text: Text(String(workout.numberOfCompletedSets ?? 0))))
-        entries.append(BannerViewEntry(id: 2, title: Text("Weight"), text: Text(WeightUnit.format(weight: workout.totalCompletedWeight ?? 0, from: .metric, to: settingsStore.weightUnit))))
+        entries.append(BannerViewEntry(id: 0, title: Text("時間"), text: Text(Workout.durationFormatter.string(from: workout.safeDuration) ?? "")))
+        entries.append(BannerViewEntry(id: 1, title: Text("セット"), text: Text(String(workout.numberOfCompletedSets ?? 0))))
+        entries.append(BannerViewEntry(id: 2, title: Text("重量"), text: Text(WeightUnit.format(weight: workout.totalCompletedWeight ?? 0, from: .metric, to: settingsStore.weightUnit))))
         return entries
     }
 }

@@ -98,25 +98,25 @@ struct WorkoutDetailView : View {
 //            if editMode?.wrappedValue == .active {
                 Section {
                     // TODO: add clear button
-                    TextField("Title", text: workoutTitle, onEditingChanged: { isEditingTextField in
+                    TextField("タイトル", text: workoutTitle, onEditingChanged: { isEditingTextField in
                         if !isEditingTextField {
                             self.adjustAndSaveWorkoutTitleInput()
                         }
                     })
-                    TextField("Comment", text: workoutComment, onEditingChanged: { isEditingTextField in
+                    TextField("コメント", text: workoutComment, onEditingChanged: { isEditingTextField in
                         if !isEditingTextField {
                             self.adjustAndSaveWorkoutCommentInput()
                         }
                     })
                 }
-                
+
                 Section {
                     DatePicker(selection: $workout.safeStart, in: ...min(workout.safeEnd, Date())) {
-                        Text("Start")
+                        Text("開始")
                     }
-                    
+
                     DatePicker(selection: $workout.safeEnd, in: workout.safeStart...Date()) {
-                        Text("End")
+                        Text("終了")
                     }
                 }
 //            }
@@ -148,7 +148,8 @@ struct WorkoutDetailView : View {
                 }) {
                     HStack {
                         Image(systemName: "plus")
-                        Text("Add Exercises")
+                            .accessibilityHidden(true)
+                        Text("種目を追加")
                     }
                 }
             }
@@ -163,6 +164,8 @@ struct WorkoutDetailView : View {
                     Image(systemName: "ellipsis")
                         .padding([.leading, .top, .bottom])
                 }
+                .accessibilityLabel("オプション")
+                .accessibilityHint("共有、繰り返しなどを表示")
                 EditButton()
             }
         )
@@ -179,20 +182,18 @@ struct WorkoutDetailView : View {
                     self.managedObjectContext.saveOrCrash()
             })
         }
-        .actionSheet(isPresented: $showingOptionsMenu) {
-            ActionSheet(title: Text("Workout"), buttons: [
-                .default(Text("Share"), action: {
-                    guard let logText = self.workout.logText(in: self.exerciseStore.exercises, weightUnit: self.settingsStore.weightUnit) else { return }
-                    self.activityItems = [logText]
-                }),
-                .default(Text("Repeat"), action: {
-                    Self.repeatWorkout(workout: self.workout, settingsStore: self.settingsStore, sceneState: sceneState)
-                }),
-                .default(Text("Repeat (Blank)"), action: {
-                    Self.repeatWorkoutBlank(workout: self.workout, settingsStore: self.settingsStore, sceneState: sceneState)
-                }),
-                .cancel()
-            ])
+        .confirmationDialog("ワークアウト", isPresented: $showingOptionsMenu, titleVisibility: .visible) {
+            Button("共有") {
+                guard let logText = self.workout.logText(in: self.exerciseStore.exercises, weightUnit: self.settingsStore.weightUnit) else { return }
+                self.activityItems = [logText]
+            }
+            Button("繰り返し") {
+                Self.repeatWorkout(workout: self.workout, settingsStore: self.settingsStore, sceneState: sceneState)
+            }
+            Button("繰り返し（空白）") {
+                Self.repeatWorkoutBlank(workout: self.workout, settingsStore: self.settingsStore, sceneState: sceneState)
+            }
+            Button("キャンセル", role: .cancel) { }
         }
         .overlay(ActivitySheet(activityItems: $activityItems))
     }
@@ -236,7 +237,7 @@ extension WorkoutDetailView {
 #if DEBUG
 struct WorkoutDetailView_Previews : PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             WorkoutDetailView(workout: MockWorkoutData.metricRandom.workout)
                 .mockEnvironment(weightUnit: .metric)
         }

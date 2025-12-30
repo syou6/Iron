@@ -7,7 +7,7 @@
 //
 
 import CoreData
-import Charts
+import DGCharts
 import WorkoutDataKit
 
 enum WorkoutExerciseChartData {
@@ -61,13 +61,13 @@ enum WorkoutExerciseChartData {
         var title: String {
             switch self {
             case .oneRM:
-                return "Estimated 1RM"
+                return "推定1RM"
             case .totalWeight:
-                return "Total Weight"
+                return "総重量"
             case .totalSets:
-                return "Total Sets"
+                return "総セット数"
             case .totalRepetitions:
-                return "Total Repetitions"
+                return "総レップ数"
             }
         }
     }
@@ -81,13 +81,13 @@ enum WorkoutExerciseChartData {
         var title: String {
             switch self {
             case .month:
-                return "Month"
+                return "1ヶ月"
             case .threeMonths:
-                return "3 Months"
+                return "3ヶ月"
             case .year:
-                return "Year"
+                return "1年"
             case .all:
-                return "All"
+                return "全期間"
             }
         }
         

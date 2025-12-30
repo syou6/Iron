@@ -42,13 +42,13 @@ struct WorkoutPlanView: View {
     var body: some View {
         List {
             Section {
-                TextField("Title", text: workoutPlanTitle, onEditingChanged: { isEditingTextField in
+                TextField("タイトル", text: workoutPlanTitle, onEditingChanged: { isEditingTextField in
                     if !isEditingTextField {
                         self.adjustAndSaveWorkoutTitleInput()
                     }
                 })
             }
-            Section(header: Text("Routines".uppercased())) {
+            Section(header: Text("ルーティン".uppercased())) {
                 ForEach(workoutRoutines) { workoutRoutine in
                     NavigationLink(destination: WorkoutRoutineView(workoutRoutine: workoutRoutine)) {
                         VStack(alignment: .leading) {
@@ -57,6 +57,21 @@ struct WorkoutPlanView: View {
                                 .lineLimit(1)
                                 .foregroundColor(.secondary)
                                 .font(.caption)
+                        }
+                    }
+                    .contextMenu {
+                        Button(action: {
+                            let copy = workoutRoutine.duplicate(context: self.managedObjectContext)
+                            copy.workoutPlan = self.workoutPlan
+                            self.managedObjectContext.saveOrCrash()
+                        }) {
+                            Label("複製", systemImage: "doc.on.doc")
+                        }
+                        Button(role: .destructive, action: {
+                            self.managedObjectContext.delete(workoutRoutine)
+                            self.managedObjectContext.saveOrCrash()
+                        }) {
+                            Label("削除", systemImage: "trash")
                         }
                     }
                 }
@@ -79,7 +94,7 @@ struct WorkoutPlanView: View {
                 }) {
                     HStack {
                         Image(systemName: "plus")
-                        Text("Add Routine")
+                        Text("ルーティンを追加")
                     }
                 }
             }
@@ -87,13 +102,18 @@ struct WorkoutPlanView: View {
         .listStyleCompat_InsetGroupedListStyle()
         .navigationBarTitle(Text(workoutPlan.displayTitle), displayMode: .inline)
         .navigationBarItems(trailing: EditButton())
-        .actionSheet(item: $offsetsToDelete) { offsets in
-            ActionSheet(title: Text("This cannot be undone."), buttons: [
-                .destructive(Text("Delete Workout Routine"), action: {
+        .confirmationDialog("この操作は取り消せません", isPresented: Binding(
+            get: { offsetsToDelete != nil },
+            set: { if !$0 { offsetsToDelete = nil } }
+        ), titleVisibility: .visible) {
+            Button("ルーティンを削除", role: .destructive) {
+                if let offsets = offsetsToDelete {
                     self.deleteAt(offsets: offsets)
-                }),
-                .cancel()
-            ])
+                }
+            }
+            Button("キャンセル", role: .cancel) {
+                offsetsToDelete = nil
+            }
         }
     }
     
@@ -125,7 +145,7 @@ struct WorkoutPlanView: View {
 #if DEBUG
 struct WorkoutPlanView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             WorkoutPlanView(workoutPlan: MockWorkoutData.metric.workoutPlan)
                 .mockEnvironment(weightUnit: .metric)
         }

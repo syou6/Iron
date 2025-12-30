@@ -48,12 +48,12 @@ public class WorkoutRoutineExercise: NSManagedObject, Codable {
                     }
                 }
                 if let reps = reps() {
-                    return "\(workoutRoutineSets.count) sets of \(reps) reps"
+                    return "\(workoutRoutineSets.count)セット × \(reps)回"
                 }
             }
         }
         
-        return "\(workoutRoutineSets.count) sets"
+        return "\(workoutRoutineSets.count)セット"
     }
     
     public func exercise(in exercises: [Exercise]) -> Exercise? {

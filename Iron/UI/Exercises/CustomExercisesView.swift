@@ -51,10 +51,6 @@ struct CustomExercisesView: View {
                     .environmentObject(self.settingsStore))
             }
             .onDelete { offsets in
-                guard UIDevice.current.userInterfaceIdiom != .pad else { // TODO: actionSheet not supported on iPad yet (13.2)
-                    self.deleteAtOffsets(offsets: offsets)
-                    return
-                }
                 self.offsetsToDelete = offsets
             }
             Button(action: {
@@ -62,7 +58,7 @@ struct CustomExercisesView: View {
             }) {
                 HStack {
                     Image(systemName: "plus")
-                    Text("Create Exercise")
+                    Text("種目を作成")
                 }
             }
         }
@@ -71,13 +67,20 @@ struct CustomExercisesView: View {
         .sheet(item: $activeSheet, content: { type in
             self.sheetView(type: type)
         })
-        .actionSheet(item: $offsetsToDelete) { offsets in
-            ActionSheet(title: Text("This cannot be undone."), message: Text("Warning: Any set belonging to this exercise will be deleted."), buttons: [
-                .destructive(Text("Delete"), action: {
+        .confirmationDialog("この操作は取り消せません", isPresented: Binding(
+            get: { offsetsToDelete != nil },
+            set: { if !$0 { offsetsToDelete = nil } }
+        ), titleVisibility: .visible) {
+            Button("削除", role: .destructive) {
+                if let offsets = offsetsToDelete {
                     self.deleteAtOffsets(offsets: offsets)
-                }),
-                .cancel()
-            ])
+                }
+            }
+            Button("キャンセル", role: .cancel) {
+                offsetsToDelete = nil
+            }
+        } message: {
+            Text("警告: この種目に属するセットも削除されます")
         }
     }
     

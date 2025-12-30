@@ -3,10 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		836E4302E494AACD10BC13BF /* PresetProgramSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E4302E494AACD10BC13BE /* PresetProgramSheet.swift */; };
+		19B1228DCA4D76F23D8D23F6 /* PresetPrograms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B1228DCA4D76F23D8D23F5 /* PresetPrograms.swift */; };
+		C0176DA872A35569D6BE01AF /* VolumeStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0176DA872A35569D6BE01AE /* VolumeStatsView.swift */; };
+		ED9B54D03EE4AF0BFAFE0638 /* ProgressiveOverloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9B54D03EE4AF0BFAFE0637 /* ProgressiveOverloadView.swift */; };
+		BBBB000000000000000001 /* MuscleHeatMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBB000000000000000000 /* MuscleHeatMapView.swift */; };
+		CCCC000000000000000001 /* EpicMilestonesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCC000000000000000000 /* EpicMilestonesView.swift */; };
+		DDDD000000000000000001 /* MuscleHeatMap3DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDD000000000000000000 /* MuscleHeatMap3DView.swift */; };
+		AAAA000000000000000001 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAA000000000000000000 /* OnboardingView.swift */; };
 		8A0683AE239C5B53001F0A1E /* WorkoutDataStorage+shared2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF07874239B246600CA95D6 /* WorkoutDataStorage+shared2.swift */; };
 		8A0683AF239C5B6F001F0A1E /* WorkoutDataStorage+GroupStoreURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF0785F239AF57A00CA95D6 /* WorkoutDataStorage+GroupStoreURL.swift */; };
 		8A0683B0239C5B83001F0A1E /* FileManager+GroupContainerURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF0785D239AF53500CA95D6 /* FileManager+GroupContainerURL.swift */; };
@@ -74,9 +82,9 @@
 		8A3C5F99218E3F4F00467DA6 /* UserDefaults+PinnedCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3C5F98218E3F4F00467DA6 /* UserDefaults+PinnedCharts.swift */; };
 		8A4C129A23A2A5DA0026BD4E /* IntentWorkoutSet+WorkoutSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4C129923A2A5DA0026BD4E /* IntentWorkoutSet+WorkoutSet.swift */; };
 		8A4D3B7223858F6F007A3792 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4D3B7123858F6F007A3792 /* NotificationManager.swift */; };
-		8A50F127243F5253003B3A6E /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 8A50F126243F5253003B3A6E /* Charts */; };
-		8A50F129243F525D003B3A6E /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 8A50F128243F525D003B3A6E /* Charts */; };
-		8A50F12B243F5262003B3A6E /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 8A50F12A243F5262003B3A6E /* Charts */; };
+		8A50F127243F5253003B3A6E /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 8A50F126243F5253003B3A6E /* DGCharts */; };
+		8A50F129243F525D003B3A6E /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 8A50F128243F525D003B3A6E /* DGCharts */; };
+		8A50F12B243F5262003B3A6E /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 8A50F12A243F5262003B3A6E /* DGCharts */; };
 		8A51E493239D45B200336296 /* ViewOneRepMaxIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A51E492239D45B200336296 /* ViewOneRepMaxIntentHandler.swift */; };
 		8A56A47F22D7C93B0076E99A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56A47E22D7C93B0076E99A /* SettingsView.swift */; };
 		8A56A48122D7CDC60076E99A /* UserDefaults+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56A48022D7CDC60076E99A /* UserDefaults+Settings.swift */; };
@@ -514,6 +522,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		836E4302E494AACD10BC13BE /* PresetProgramSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetProgramSheet.swift; sourceTree = "<group>"; };
+		19B1228DCA4D76F23D8D23F5 /* PresetPrograms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetPrograms.swift; sourceTree = "<group>"; };
+		C0176DA872A35569D6BE01AE /* VolumeStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeStatsView.swift; sourceTree = "<group>"; };
+		ED9B54D03EE4AF0BFAFE0637 /* ProgressiveOverloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressiveOverloadView.swift; sourceTree = "<group>"; };
+		BBBB000000000000000000 /* MuscleHeatMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleHeatMapView.swift; sourceTree = "<group>"; };
+		CCCC000000000000000000 /* EpicMilestonesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpicMilestonesView.swift; sourceTree = "<group>"; };
+		DDDD000000000000000000 /* MuscleHeatMap3DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleHeatMap3DView.swift; sourceTree = "<group>"; };
+		AAAA000000000000000000 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		8A0683B4239C76E0001F0A1E /* Shortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcuts.swift; sourceTree = "<group>"; };
 		8A08D3D52349486800B09687 /* WorkoutData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WorkoutData.xcdatamodel; sourceTree = "<group>"; };
 		8A0ADC3023294EAD00081F4B /* UITabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITabView.swift; sourceTree = "<group>"; };
@@ -761,7 +777,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A0683B7239C77B4001F0A1E /* WorkoutDataKit.framework in Frameworks */,
-				8A50F129243F525D003B3A6E /* Charts in Frameworks */,
+				8A50F129243F525D003B3A6E /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -770,7 +786,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A60438D239C4DBB00CFB7C0 /* IntentsUI.framework in Frameworks */,
-				8A50F12B243F5262003B3A6E /* Charts in Frameworks */,
+				8A50F12B243F5262003B3A6E /* DGCharts in Frameworks */,
 				8A0683BC239C77BB001F0A1E /* WorkoutDataKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -781,7 +797,7 @@
 			files = (
 				8AB0C94D23453F080009F031 /* HealthKit.framework in Frameworks */,
 				8AB5211523992ABC008064B2 /* WorkoutDataKit.framework in Frameworks */,
-				8A50F127243F5253003B3A6E /* Charts in Frameworks */,
+				8A50F127243F5253003B3A6E /* DGCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -866,6 +882,7 @@
 				8A70A73623041542000A3C76 /* TimerBannerView.swift */,
 				8AFE11AF232CDDF6000E9393 /* EditCurrentWorkoutTimeView.swift */,
 				8A70A73823041637000A3C76 /* RestTimerView.swift */,
+				836E4302E494AACD10BC13BE /* PresetProgramSheet.swift */,
 			);
 			path = Workout;
 			sourceTree = "<group>";
@@ -1430,10 +1447,19 @@
 				8A1D989422C7C6690071225D /* Workout */,
 				8ABB4C6422CE059E0075CCE6 /* Exercises */,
 				8A56A47D22D7C91B0076E99A /* Settings */,
+				AAAA000000000000000002 /* Onboarding */,
 				8AA8BE7A24367C87005CAD86 /* ActivitySheet.swift */,
 				8A744EEF25154E6B007361EC /* SwiftUISupport.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		AAAA000000000000000002 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				AAAA000000000000000000 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		8AC8064222BADBD300086032 /* Feed */ = {
@@ -1448,6 +1474,11 @@
 				8A743E0C252B7A9D0037C162 /* ActivityCalendarView.swift */,
 				8A9BC5BB22BBAE3C006CAA0F /* ExerciseChartViewCell.swift */,
 				8A9BC5B922BBACCB006CAA0F /* ExerciseChartView.swift */,
+				C0176DA872A35569D6BE01AE /* VolumeStatsView.swift */,
+				ED9B54D03EE4AF0BFAFE0637 /* ProgressiveOverloadView.swift */,
+				BBBB000000000000000000 /* MuscleHeatMapView.swift */,
+				CCCC000000000000000000 /* EpicMilestonesView.swift */,
+				DDDD000000000000000000 /* MuscleHeatMap3DView.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -1491,6 +1522,7 @@
 			children = (
 				8A81CFB022E3B1CF00B11394 /* PinnedChart.swift */,
 				8AE0A79D233128280021EE23 /* Quote.swift */,
+				19B1228DCA4D76F23D8D23F5 /* PresetPrograms.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1548,7 +1580,7 @@
 			);
 			name = IronIntents;
 			packageProductDependencies = (
-				8A50F128243F525D003B3A6E /* Charts */,
+				8A50F128243F525D003B3A6E /* DGCharts */,
 			);
 			productName = IronIntents;
 			productReference = 8A604382239C4DBB00CFB7C0 /* IronIntents.appex */;
@@ -1570,7 +1602,7 @@
 			);
 			name = IronIntentsUI;
 			packageProductDependencies = (
-				8A50F12A243F5262003B3A6E /* Charts */,
+				8A50F12A243F5262003B3A6E /* DGCharts */,
 			);
 			productName = IronIntentsUI;
 			productReference = 8A60438B239C4DBB00CFB7C0 /* IronIntentsUI.appex */;
@@ -1598,7 +1630,7 @@
 			);
 			name = Iron;
 			packageProductDependencies = (
-				8A50F126243F5253003B3A6E /* Charts */,
+				8A50F126243F5253003B3A6E /* DGCharts */,
 			);
 			productName = "Rhino Fit";
 			productReference = 8A7D6E94200BF92E00AA0FA7 /* Iron.app */;
@@ -2090,6 +2122,14 @@
 				8ABB4C6622CE05DD0075CCE6 /* ExerciseMuscleGroupsView.swift in Sources */,
 				8A3C5F99218E3F4F00467DA6 /* UserDefaults+PinnedCharts.swift in Sources */,
 				8AC8063D22BAC54200086032 /* FeedView.swift in Sources */,
+				836E4302E494AACD10BC13BF /* PresetProgramSheet.swift in Sources */,
+				19B1228DCA4D76F23D8D23F6 /* PresetPrograms.swift in Sources */,
+				C0176DA872A35569D6BE01AF /* VolumeStatsView.swift in Sources */,
+				ED9B54D03EE4AF0BFAFE0638 /* ProgressiveOverloadView.swift in Sources */,
+				BBBB000000000000000001 /* MuscleHeatMapView.swift in Sources */,
+				CCCC000000000000000001 /* EpicMilestonesView.swift in Sources */,
+				DDDD000000000000000001 /* MuscleHeatMap3DView.swift in Sources */,
+				AAAA000000000000000001 /* OnboardingView.swift in Sources */,
 				8AB5213E23999ED4008064B2 /* WorkoutDataStorage+shared.swift in Sources */,
 				8AE0A79E233128280021EE23 /* Quote.swift in Sources */,
 				8A81CFB122E3B1CF00B11394 /* PinnedChart.swift in Sources */,
@@ -2296,9 +2336,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = IronIntents/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2307,7 +2347,7 @@
 				MARKETING_VERSION = 1.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.IronIntents;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.IronIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -2323,9 +2363,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = IronIntents/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2333,7 +2373,7 @@
 				);
 				MARKETING_VERSION = 1.6;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.IronIntents;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.IronIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -2349,9 +2389,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = IronIntentsUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2360,7 +2400,7 @@
 				MARKETING_VERSION = 1.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.IronIntentsUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.IronIntentsUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -2376,9 +2416,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = IronIntentsUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2386,7 +2426,7 @@
 				);
 				MARKETING_VERSION = 1.6;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.IronIntentsUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.IronIntentsUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -2446,7 +2486,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2501,7 +2541,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -2519,15 +2559,15 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = Iron/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.6;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -2544,15 +2584,15 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = Iron/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.6;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -2566,14 +2606,14 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = IronTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.IronTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2587,14 +2627,14 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = IronTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.IronTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2611,16 +2651,16 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_MODULE = WatchIron_Extension;
 				INFOPLIST_KEY_CFBundleDisplayName = Iron;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.kabouzeid.Iron;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.shodev.kintore;
 				MARKETING_VERSION = 1.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -2639,15 +2679,15 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_MODULE = WatchIron_Extension;
 				INFOPLIST_KEY_CFBundleDisplayName = Iron;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.kabouzeid.Iron;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.shodev.kintore;
 				MARKETING_VERSION = 1.6;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -2666,7 +2706,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_ASSET_PATHS = "\"WatchIron Extension/Preview Content\"";
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WatchIron Extension/Info.plist";
@@ -2682,7 +2722,7 @@
 				MARKETING_VERSION = 1.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -2701,7 +2741,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_ASSET_PATHS = "\"WatchIron Extension/Preview Content\"";
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WatchIron Extension/Info.plist";
@@ -2716,7 +2756,7 @@
 				);
 				MARKETING_VERSION = 1.6;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -2736,9 +2776,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = IronWidget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2747,7 +2787,7 @@
 				MARKETING_VERSION = 1.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.IronWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.IronWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -2765,9 +2805,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				INFOPLIST_FILE = IronWidget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2775,7 +2815,7 @@
 				);
 				MARKETING_VERSION = 1.6;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.Iron.IronWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.IronWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -2793,13 +2833,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = WorkoutDataKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2807,7 +2847,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.WorkoutDataKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.WorkoutDataKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2828,20 +2868,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 2L6CX7XT2U;
+				DEVELOPMENT_TEAM = S34M5TZHHF;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = WorkoutDataKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kabouzeid.WorkoutDataKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shodev.kintore.WorkoutDataKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -2940,29 +2980,29 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		8A50F125243F5253003B3A6E /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/danielgindi/Charts";
+			repositoryURL = "https://github.com/ChartsOrg/Charts";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 4.1.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8A50F126243F5253003B3A6E /* Charts */ = {
+		8A50F126243F5253003B3A6E /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8A50F125243F5253003B3A6E /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = Charts;
+			productName = DGCharts;
 		};
-		8A50F128243F525D003B3A6E /* Charts */ = {
+		8A50F128243F525D003B3A6E /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8A50F125243F5253003B3A6E /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = Charts;
+			productName = DGCharts;
 		};
-		8A50F12A243F5262003B3A6E /* Charts */ = {
+		8A50F12A243F5262003B3A6E /* DGCharts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8A50F125243F5253003B3A6E /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = Charts;
+			productName = DGCharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 

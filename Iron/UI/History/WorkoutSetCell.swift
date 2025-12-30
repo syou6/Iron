@@ -29,7 +29,7 @@ struct WorkoutSetCell: View {
     private func titleView(isPlaceholder: Bool, colorMode: ColorMode) -> some View {
         HStack {
             if isPlaceholder {
-                Text("Set")
+                Text("セット")
                     .foregroundColor(.secondary)
             } else {
                 Text(workoutSet.displayTitle(weightUnit: settingsStore.weightUnit))
@@ -51,9 +51,11 @@ struct WorkoutSetCell: View {
             if showUpNextIndicator {
                 Image(systemName: "chevron.right.circle.fill")
                     .foregroundColor(.accentColor)
+                    .accessibilityLabel("次のセット")
             } else if showCompleted && workoutSet.isCompleted {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(colorMode == .disabled ? .secondary : .green)
+                    .accessibilityLabel("完了")
             }
             
             VStack(alignment: .leading, spacing: 4) {
@@ -100,6 +102,7 @@ struct WorkoutSetCell: View {
                 // TODO: replace with a trophy symbol
                 Image(systemName: "star.circle.fill")
                     .foregroundColor(colorMode == .disabled ? .secondary : .yellow)
+                    .accessibilityLabel("自己ベスト")
             }
 
             Text("\(index)")

@@ -23,7 +23,7 @@ struct CreateCustomExerciseSheet: View {
     }
     
     private var saveButton: some View {
-        Button("Save") {
+        Button("保存") {
             let title = self.exerciseValues.title.trimmingCharacters(in: .whitespacesAndNewlines)
             let description = self.exerciseValues.description.trimmingCharacters(in: .whitespacesAndNewlines)
             let primaryMuscle = self.exerciseValues.muscles
@@ -47,17 +47,17 @@ struct CreateCustomExerciseSheet: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             EditCustomExerciseView(exerciseValues: $exerciseValues)
-                .navigationBarTitle("Edit Exercise", displayMode: .inline)
+                .navigationBarTitle("種目を編集", displayMode: .inline)
                 .navigationBarItems(
                     leading:
-                    Button("Cancel") {
+                    Button("キャンセル") {
                         self.presentationMode.wrappedValue.dismiss()
                     },
                     trailing: saveButton
                 )
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
 }

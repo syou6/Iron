@@ -84,7 +84,7 @@ struct RestTimerView: View {
                 self.restTimerStore.restTimerStart = nil
                 self.restTimerStore.restTimerDuration = nil
             }) {
-                Text("Cancel").fontWeight(.semibold).foregroundColor(.white)
+                Text("停止").fontWeight(.semibold).foregroundColor(.white)
             }
         }
     }
@@ -138,7 +138,7 @@ struct RestTimerView: View {
                 CircleButton(action: {
                     self.showCustomTimerSelector = true
                 }) {
-                    Text("Other")
+                    Text("その他")
                 }
             }
         }
@@ -152,7 +152,7 @@ struct RestTimerView: View {
                     self.showCustomTimerSelector = false
                 }
             }
-            Button("Back") {
+            Button("戻る") {
                 self.showCustomTimerSelector = false
             }
         }

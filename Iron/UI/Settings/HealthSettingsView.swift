@@ -12,30 +12,38 @@ import WorkoutDataKit
 struct HealthSettingsView: View {
     @EnvironmentObject var exerciseStore: ExerciseStore
     @Environment(\.managedObjectContext) var managedObjectContext
-    
+
     @State private var updating = false
-    @State private var updateResult: IdentifiableHolder<Result<HealthManager.WorkoutUpdates, Error>>?
-    
-    func updateResultAlert(updateResult: Result<HealthManager.WorkoutUpdates, Error>) -> Alert {
-        switch updateResult {
-        case .success(let updates):
-            return Alert(
-                title: Text("Successfully Updated Workouts in Apple Health"),
-                message: Text("\(updates.created) workouts were created, \(updates.deleted) workouts were deleted and \(updates.modified) workouts were modified.")
-            )
-        case .failure(let error):
-            return Alert(title: Text("Update Workouts in Apple Health Failed"), message: Text(error.localizedDescription))
+    @State private var updateResult: Result<HealthManager.WorkoutUpdates, Error>?
+
+    private var alertTitle: String {
+        guard let result = updateResult else { return "" }
+        switch result {
+        case .success:
+            return "Apple Healthのワークアウトを更新しました"
+        case .failure:
+            return "Apple Healthの更新に失敗しました"
         }
     }
-    
+
+    private var alertMessage: String {
+        guard let result = updateResult else { return "" }
+        switch result {
+        case .success(let updates):
+            return "\(updates.created)件を作成、\(updates.deleted)件を削除、\(updates.modified)件を変更しました。"
+        case .failure(let error):
+            return error.localizedDescription
+        }
+    }
+
     var body: some View {
         Form {
-            Section(footer: Text("Adds missing workouts to Apple Health and removes workouts from Apple Health that are no longer present in Iron. This also updates workouts where the start or end time has been modified.")) {
-                Button("Update Apple Health Workouts") {
+            Section(footer: Text("不足しているワークアウトをApple Healthに追加し、削除されたワークアウトを削除します。開始・終了時刻が変更されたワークアウトも更新されます。")) {
+                Button("Apple Healthワークアウトを更新") {
                     self.updating = true
                     HealthManager.shared.updateHealthWorkouts(managedObjectContext: self.managedObjectContext, exerciseStore: self.exerciseStore) { result in
                         DispatchQueue.main.async {
-                            self.updateResult = IdentifiableHolder(value: result)
+                            self.updateResult = result
                             self.updating = false
                         }
                     }
@@ -44,8 +52,13 @@ struct HealthSettingsView: View {
             }
         }
         .navigationBarTitle("Apple Health", displayMode: .inline)
-        .alert(item: $updateResult) { updateResultHolder in
-            self.updateResultAlert(updateResult: updateResultHolder.value)
+        .alert(alertTitle, isPresented: Binding(
+            get: { updateResult != nil },
+            set: { if !$0 { updateResult = nil } }
+        )) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(alertMessage)
         }
     }
 }

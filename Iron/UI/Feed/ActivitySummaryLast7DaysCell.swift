@@ -11,12 +11,12 @@ import SwiftUI
 struct ActivitySummaryLast7DaysCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Activity")
+            Text("アクティビティ")
                 .bold()
                 .font(.subheadline)
                 .foregroundColor(.accentColor)
-            
-            Text("Summary Last 7 Days")
+
+            Text("過去7日間のサマリー")
                 .font(.headline)
             
             Divider()

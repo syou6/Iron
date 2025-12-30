@@ -13,98 +13,127 @@ let NAVIGATION_BAR_SPACING: CGFloat = 16
 
 struct ContentView : View {
     @EnvironmentObject private var sceneState: SceneState
-    
-    @State private var restoreResult: IdentifiableHolder<Result<Void, Error>>?
-    @State private var restoreBackupData: IdentifiableHolder<Data>?
-    
+
+    @State private var restoreResult: Result<Void, Error>?
+    @State private var restoreBackupData: Data?
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+
+    private var restoreAlertTitle: String {
+        guard let result = restoreResult else { return "" }
+        switch result {
+        case .success:
+            return "復元成功"
+        case .failure:
+            return "復元失敗"
+        }
+    }
+
+    private var restoreAlertMessage: String {
+        guard let result = restoreResult else { return "" }
+        switch result {
+        case .success:
+            return ""
+        case .failure(let error):
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case let .dataCorrupted(context):
+                    return "データ破損: \(context.debugDescription)"
+                case let .keyNotFound(_, context):
+                    return "キーが見つかりません: \(context.debugDescription)"
+                case let .typeMismatch(_, context):
+                    return "型の不一致: \(context.debugDescription)"
+                case let .valueNotFound(_, context):
+                    return "値が見つかりません: \(context.debugDescription)"
+                @unknown default:
+                    return "デコードエラー: \(error.localizedDescription)"
+                }
+            } else {
+                return error.localizedDescription
+            }
+        }
+    }
+
     var body: some View {
-        tabView
+        ZStack {
+            tabView
             .edgesIgnoringSafeArea([.top, .bottom])
             .onReceive(NotificationCenter.default.publisher(for: Notification.Name.RestoreFromBackup)) { output in
                 guard let backupData = output.userInfo?[restoreFromBackupDataUserInfoKey] as? Data else { return }
-                self.restoreBackupData = IdentifiableHolder(value: backupData)
+                self.restoreBackupData = backupData
             }
-            .overlay(
-                Color.clear.frame(width: 0, height: 0)
-                    // This is a hack, we need to have this in an overlay and in Color.clear so it also works on iPad, tested on iOS 13.4
-                    .actionSheet(item: $restoreBackupData) { restoreBackupDataHolder in
-                        RestoreActionSheet.create(context: WorkoutDataStorage.shared.persistentContainer.viewContext, exerciseStore: ExerciseStore.shared, data: { restoreBackupDataHolder.value }) { result in
-                            self.restoreResult = IdentifiableHolder(value: result)
-                        }
+            .confirmationDialog("バックアップ復元", isPresented: Binding(
+                get: { restoreBackupData != nil },
+                set: { if !$0 { restoreBackupData = nil } }
+            ), titleVisibility: .visible) {
+                Button("復元", role: .destructive) {
+                    guard let data = restoreBackupData else { return }
+                    do {
+                        try IronBackup.restoreBackupData(data: data, managedObjectContext: WorkoutDataStorage.shared.persistentContainer.viewContext, exerciseStore: ExerciseStore.shared)
+                        restoreResult = .success(())
+                    } catch {
+                        restoreResult = .failure(error)
                     }
-            )
-            .alert(item: $restoreResult) { restoreResultHolder in
-                RestoreActionSheet.restoreResultAlert(restoreResult: restoreResultHolder.value)
+                }
+                Button("キャンセル", role: .cancel) {
+                    restoreBackupData = nil
+                }
+            } message: {
+                Text("この操作は取り消せません。すべてのワークアウトとカスタム種目がバックアップの内容に置き換わります。設定は影響を受けません。")
             }
+            .alert(restoreAlertTitle, isPresented: Binding(
+                get: { restoreResult != nil },
+                set: { if !$0 { restoreResult = nil } }
+            )) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                if !restoreAlertMessage.isEmpty {
+                    Text(restoreAlertMessage)
+                }
+            }
+
+            if !hasSeenOnboarding {
+                OnboardingView(showOnboarding: Binding(
+                    get: { !self.hasSeenOnboarding },
+                    set: { if !$0 { self.hasSeenOnboarding = true } }
+                ))
+                .transition(.opacity)
+            }
+        }
     }
     
-    @ViewBuilder
     private var tabView: some View {
-        if #available(iOS 14, *) {
-            TabView(selection: $sceneState.selectedTabNumber) {
-                FeedView()
-                    .tag(SceneState.Tab.feed.rawValue)
-                    .tabItem {
-                        Label("Feed", systemImage: "house")
-                    }
+        TabView(selection: $sceneState.selectedTabNumber) {
+            FeedView()
+                .tag(SceneState.Tab.feed.rawValue)
+                .tabItem {
+                    Label("ホーム", systemImage: "house")
+                }
 
-                HistoryView()
-                    .tag(SceneState.Tab.history.rawValue)
-                    .tabItem {
-                        Label("History", systemImage: "clock")
-                    }
+            HistoryView()
+                .tag(SceneState.Tab.history.rawValue)
+                .tabItem {
+                    Label("履歴", systemImage: "clock")
+                }
 
-                WorkoutTab()
-                    .tag(SceneState.Tab.workout.rawValue)
-                    .tabItem {
-                        Label("Workout", systemImage: "plus.diamond")
-                    }
+            WorkoutTab()
+                .tag(SceneState.Tab.workout.rawValue)
+                .tabItem {
+                    Label("ワークアウト", systemImage: "plus.diamond")
+                }
 
-                ExerciseMuscleGroupsView()
-                    .tag(SceneState.Tab.exercises.rawValue)
-                    .tabItem {
-                        Label("Exercises", systemImage: "tray.full")
-                    }
+            ExerciseMuscleGroupsView()
+                .tag(SceneState.Tab.exercises.rawValue)
+                .tabItem {
+                    Label("種目", systemImage: "tray.full")
+                }
 
-                SettingsView()
-                    .tag(SceneState.Tab.settings.rawValue)
-                    .tabItem {
-                        Label("Settings", systemImage: "gear")
-                    }
-            }
-            .productionEnvironment()
-        } else {
-            /**
-             *  We inject .productionEnvironment() for every tab, because when the "screen reading" accessibility setting is enabled,
-             *  some Tabs get created by the system in the background without its parents environment! This is probably a bug and it happens since iOS 13.4
-             */
-            UITabView(viewControllers: [
-                FeedView()
-                    .productionEnvironment()
-                    .hostingController()
-                    .tabItem(title: "Feed", image: UIImage(systemName: "house"), tag: 0),
-
-                HistoryView()
-                    .productionEnvironment()
-                    .hostingController()
-                    .tabItem(title: "History", image: UIImage(systemName: "clock"), tag: 1),
-
-                WorkoutTab()
-                    .productionEnvironment()
-                    .hostingController()
-                    .tabItem(title: "Workout", image: UIImage(systemName: "plus.square"), tag: 2),
-
-                ExerciseMuscleGroupsView()
-                    .productionEnvironment()
-                    .hostingController()
-                    .tabItem(title: "Exercises", image: UIImage(systemName: "tray.full"), tag: 3),
-
-                SettingsView()
-                    .productionEnvironment()
-                    .hostingController()
-                    .tabItem(title: "Settings", image: UIImage(systemName: "gear"), tag: 4),
-            ], selection: sceneState.selectedTabNumber)
+            SettingsView()
+                .tag(SceneState.Tab.settings.rawValue)
+                .tabItem {
+                    Label("設定", systemImage: "gear")
+                }
         }
+        .productionEnvironment()
     }
 }
 

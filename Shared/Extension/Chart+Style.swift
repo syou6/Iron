@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Charts
+import DGCharts
 
 extension BarLineChartViewBase {
     func setupStyle() {
@@ -55,7 +55,7 @@ extension BarLineChartViewBase {
         self.legend.textColor = labelColor
         
         // no data
-        self.noDataText = "No data available"
+        self.noDataText = "データがありません"
         self.noDataFont = UIFont.preferredFont(forTextStyle: .body)
         self.noDataTextColor = .secondaryLabel
     }

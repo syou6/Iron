@@ -26,7 +26,7 @@ struct WorkoutRoutineSetCell: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text("Set")
+                    Text("セット")
                     
                     Text(repetitionIntervalString ?? " ")
                         .background(

@@ -55,28 +55,55 @@ struct CurrentWorkoutView: View {
     
     private func createDefaultWorkoutSets(workoutExercise: WorkoutExercise) -> NSOrderedSet {
         var numberOfSets = 3
-        // try to guess the number of sets
-        if let history = try? managedObjectContext.fetch(workoutExercise.historyFetchRequest), history.count >= 3 {
-            // one month since last workout and at least three workouts
-            if let firstHistoryStart = history[0].workout?.start, let thirdHistoryStart = history[2].workout?.start {
-                let cutoff = min(thirdHistoryStart, Calendar.current.date(byAdding: .month, value: -1, to: firstHistoryStart)!)
-                let filteredAndSortedHistory = history
-                    .filter {
-                        guard let start = $0.workout?.start else { return false }
-                        return start >= cutoff
+        var lastWorkoutSets: [WorkoutSet]? = nil
+
+        // try to guess the number of sets and get last workout data
+        if let history = try? managedObjectContext.fetch(workoutExercise.historyFetchRequest), history.count >= 1 {
+            // Get last workout sets for auto-fill
+            if settingsStore.autoFillLastRecord, let lastHistory = history.first {
+                lastWorkoutSets = lastHistory.workoutSets?.array as? [WorkoutSet]
+            }
+
+            if history.count >= 3 {
+                // one month since last workout and at least three workouts
+                if let firstHistoryStart = history[0].workout?.start, let thirdHistoryStart = history[2].workout?.start {
+                    let cutoff = min(thirdHistoryStart, Calendar.current.date(byAdding: .month, value: -1, to: firstHistoryStart)!)
+                    let filteredAndSortedHistory = history
+                        .filter {
+                            guard let start = $0.workout?.start else { return false }
+                            return start >= cutoff
+                    }
+                    .sorted {
+                        ($0.workoutSets?.count ?? 0) < ($1.workoutSets?.count ?? 0)
+                    }
+
+                    if filteredAndSortedHistory.count >= 3 {
+                        let median = filteredAndSortedHistory[filteredAndSortedHistory.count / 2]
+                        numberOfSets = median.workoutSets?.count ?? numberOfSets
+                    }
                 }
-                .sorted {
-                    ($0.workoutSets?.count ?? 0) < ($1.workoutSets?.count ?? 0)
-                }
-                
-                assert(filteredAndSortedHistory.count >= 3)
-                let median = filteredAndSortedHistory[filteredAndSortedHistory.count / 2]
-                numberOfSets = median.workoutSets?.count ?? numberOfSets
             }
         }
+
+        // Use last workout sets count if available and auto-fill is enabled
+        if settingsStore.autoFillLastRecord, let lastSets = lastWorkoutSets {
+            numberOfSets = lastSets.count
+        }
+
         var workoutSets = [WorkoutSet]()
-        for _ in 0..<numberOfSets {
+        for i in 0..<numberOfSets {
             let workoutSet = WorkoutSet.create(context: managedObjectContext)
+
+            // Auto-fill from last workout or use defaults
+            if settingsStore.autoFillLastRecord, let lastSets = lastWorkoutSets, i < lastSets.count {
+                workoutSet.weightValue = lastSets[i].weightValue
+                workoutSet.repetitionsValue = lastSets[i].repetitionsValue
+            } else {
+                // Use default values from settings
+                workoutSet.weightValue = settingsStore.defaultWeight
+                workoutSet.repetitionsValue = Int16(settingsStore.defaultRepetitions)
+            }
+
             workoutSets.append(workoutSet)
         }
         return NSOrderedSet(array: workoutSets)
@@ -152,7 +179,7 @@ struct CurrentWorkoutView: View {
                     currentWorkoutExerciseDetailView(workoutExercise: workoutExercise)
                 ) {
                 VStack(alignment: .leading) {
-                    Text(workoutExercise.exercise(in: exerciseStore.exercises)?.title ?? "Unknown Exercise")
+                    Text(workoutExercise.exercise(in: exerciseStore.exercises)?.title ?? "不明な種目")
                         .foregroundColor(isCompleted ? .secondary : .primary)
                     text.map {
                         Text($0)
@@ -171,7 +198,7 @@ struct CurrentWorkoutView: View {
     }
     
     private var closeSheetButton: some View {
-        Button("Close") {
+        Button("閉じる") {
             self.activeSheet = nil
         }
     }
@@ -194,9 +221,9 @@ struct CurrentWorkoutView: View {
     
     @State private var finishWorkoutSheetActivityItems: [Any]?
     private var finishWorkoutSheet: some View {
-        NavigationView {
+        NavigationStack {
             WorkoutLog(workout: self.workout)
-                .navigationBarTitle("Summary", displayMode: .inline)
+                .navigationBarTitle("サマリー", displayMode: .inline)
                 .navigationBarItems(
                     leading: closeSheetButton,
                     trailing:
@@ -207,8 +234,10 @@ struct CurrentWorkoutView: View {
                         }) {
                             Image(systemName: "square.and.arrow.up")
                         }
-                        
-                        Button("Finish") {
+                        .accessibilityLabel("共有")
+                        .accessibilityHint("ワークアウトログを共有")
+
+                        Button("完了") {
                             self.finishWorkout()
                         }
                     }
@@ -217,7 +246,7 @@ struct CurrentWorkoutView: View {
                 .environmentObject(settingsStore)
                 .environmentObject(exerciseStore)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
     
     private func cancelWorkout() {
@@ -229,22 +258,18 @@ struct CurrentWorkoutView: View {
     }
     
     private var cancelButton: some View {
-        Button("Cancel") {
+        Button("キャンセル") {
             if (self.workout.workoutExercises?.count ?? 0) == 0 {
                 // the workout is empty, do not need confirm to cancel
                 self.cancelWorkout()
             } else {
-                guard UIDevice.current.userInterfaceIdiom != .pad else { // TODO: actionSheet not supported on iPad yet (13.2)
-                    self.cancelWorkout()
-                    return
-                }
                 self.showingCancelActionSheet = true
             }
         }
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 0) {
                 if #available(iOS 15.0, *) {
                     Divider()
@@ -254,18 +279,18 @@ struct CurrentWorkoutView: View {
                 List {
                     Section {
                         // TODO: add clear button
-                        TextField("Title", text: workoutTitle, onEditingChanged: { isEditingTextField in
+                        TextField("タイトル", text: workoutTitle, onEditingChanged: { isEditingTextField in
                             if !isEditingTextField {
                                 self.adjustAndSaveWorkoutTitleInput()
                             }
                         })
-                        TextField("Comment", text: workoutComment, onEditingChanged: { isEditingTextField in
+                        TextField("コメント", text: workoutComment, onEditingChanged: { isEditingTextField in
                             if !isEditingTextField {
                                 self.adjustAndSaveWorkoutCommentInput()
                             }
                         })
                     }
-                    Section(header: Text("Exercises".uppercased())) {
+                    Section(header: Text("種目".uppercased())) {
                         ForEach(workoutExercises) { workoutExercise in
                             self.workoutExerciseCell(workoutExercise: workoutExercise)
                         }
@@ -288,7 +313,8 @@ struct CurrentWorkoutView: View {
                         }) {
                             HStack {
                                 Image(systemName: "plus")
-                                Text("Add Exercises")
+                                    .accessibilityHidden(true)
+                                Text("種目を追加")
                             }
                         }
                     }
@@ -298,7 +324,8 @@ struct CurrentWorkoutView: View {
                         }) {
                             HStack {
                                 Image(systemName: "checkmark")
-                                Text("Finish Workout")
+                                    .accessibilityHidden(true)
+                                Text("ワークアウト完了")
                             }
                         }
                     }
@@ -308,21 +335,19 @@ struct CurrentWorkoutView: View {
             .navigationBarTitle(Text(workout.displayTitle(in: exerciseStore.exercises)), displayMode: .inline)
             .navigationBarItems(leading: cancelButton, trailing: EditButton())
             
-            Text("No exercise selected")
+            Text("種目を選択してください")
                 .foregroundColor(.secondary)
         }
         .padding(.leading, UIDevice.current.userInterfaceIdiom == .pad ? 1 : 0) // hack that makes the master view show on iPad on portrait mode
         .sheet(item: $activeSheet) { type in
             self.sheetView(type: type)
         }
-        .actionSheet(isPresented: $showingCancelActionSheet, content: {
-            ActionSheet(title: Text("This cannot be undone."), message: nil, buttons: [
-                .destructive(Text("Discard Workout"), action: {
-                    self.cancelWorkout()
-                }),
-                .cancel()
-            ])
-        })
+        .confirmationDialog("この操作は取り消せません", isPresented: $showingCancelActionSheet, titleVisibility: .visible) {
+            Button("ワークアウトを破棄", role: .destructive) {
+                self.cancelWorkout()
+            }
+            Button("キャンセル", role: .cancel) { }
+        }
     }
 }
 

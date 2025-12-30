@@ -38,32 +38,32 @@ struct ExerciseMuscleGroupsView : View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     NavigationLink(destination: AllExercisesView(exerciseGroups: exerciseGroups), isActive: $allExercisesSelected) {
                         HStack {
-                            Text("All")
+                            Text("すべて")
                             Spacer()
                             Text("(\(exerciseStore.shownExercises.count))")
                                 .foregroundColor(.secondary)
                         }
                     }
                 }
-                
+
                 Section {
                     ForEach(exerciseGroups) { exerciseGroup in
                         self.exerciseGroupCell(exercises: exerciseGroup.exercises)
                     }
                 }
-                
+
                 Section {
                     NavigationLink(destination:
                         CustomExercisesView()
-                            .navigationBarTitle(Text("Custom"), displayMode: .inline)
+                            .navigationBarTitle(Text("カスタム"), displayMode: .inline)
                     ) {
                         HStack {
-                            Text("Custom")
+                            Text("カスタム")
                             Spacer()
                             Text("(\(exerciseStore.customExercises.count))")
                                 .foregroundColor(.secondary)
@@ -73,10 +73,10 @@ struct ExerciseMuscleGroupsView : View {
                     if !exerciseStore.hiddenExercises.isEmpty {
                         NavigationLink(destination:
                             ExercisesView(exercises: exerciseStore.hiddenExercises)
-                                .navigationBarTitle(Text("Hidden"), displayMode: .inline)
+                                .navigationBarTitle(Text("非表示"), displayMode: .inline)
                         ) {
                             HStack {
-                                Text("Hidden")
+                                Text("非表示")
                                 Spacer()
                                 Text("(\(exerciseStore.hiddenExercises.count))")
                                     .foregroundColor(.secondary)
@@ -86,7 +86,7 @@ struct ExerciseMuscleGroupsView : View {
                 }
             }
             .listStyleCompat_InsetGroupedListStyle()
-            .navigationBarTitle("Exercises")
+            .navigationBarTitle("種目")
         }
         .padding(.leading, UIDevice.current.userInterfaceIdiom == .pad ? 1 : 0) // hack that makes the master view show on iPad on portrait mode
     }
@@ -101,15 +101,15 @@ private struct AllExercisesView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            TextField("Search", text: $filter.filter)
+            TextField("検索", text: $filter.filter)
                 .textFieldStyle(SearchTextFieldStyle(text: $filter.filter))
                 .padding()
-            
+
             Divider()
-            
+
             MuscleGroupSectionedExercisesView(exerciseGroups: filter.exerciseGroups)
         }
-        .navigationBarTitle(Text("All Exercises"), displayMode: .inline)
+        .navigationBarTitle(Text("すべての種目"), displayMode: .inline)
     }
 }
 

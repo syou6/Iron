@@ -93,7 +93,7 @@ struct ActivityWorkoutsPerWeekView: View {
             } else {
                 ZStack {
                     Rectangle().hidden()
-                    Text("No data available")
+                    Text("データがありません")
                         .foregroundColor(.secondary)
                 }
             }

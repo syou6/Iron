@@ -48,16 +48,16 @@ struct EditCustomExerciseView: View {
     var body: some View {
         Form {
             Section {
-                TextField("Title", text: $exerciseValues.title)
-                TextField("Description (Optional)", text: $exerciseValues.description)
+                TextField("タイトル", text: $exerciseValues.title)
+                TextField("説明（任意）", text: $exerciseValues.description)
             }
-            
-            Section(header: Text("Muscles".uppercased())) {
+
+            Section(header: Text("筋肉".uppercased())) {
                 ForEach(primaryMuscles, id: \.self) { exerciseMuscle in
                     HStack {
                         Text(exerciseMuscle.shortDisplayTitle)
                         Spacer()
-                        Text("Primary")
+                        Text("主要")
                             .foregroundColor(.secondary)
                     }
                 }
@@ -65,32 +65,32 @@ struct EditCustomExerciseView: View {
                     HStack {
                         Text(exerciseMuscle.shortDisplayTitle)
                         Spacer()
-                        Text("Secondary")
+                        Text("補助")
                             .foregroundColor(.secondary)
                     }
                 }
-                Button("Select Muscles")  {
+                Button("筋肉を選択")  {
                     self.showingMuscleSelectionSheet = true
                 }
             }
-            
-            Picker("Type", selection: $exerciseValues.type) {
+
+            Picker("タイプ", selection: $exerciseValues.type) {
                 ForEach(Exercise.ExerciseType.allCases, id: \.self) {
                     Text($0.title.capitalized).tag($0)
                 }
             }
         }
         .sheet(isPresented: $showingMuscleSelectionSheet) {
-            NavigationView {
+            NavigationStack {
                 MuscleSelectionView(muscles: Exercise.muscleNames, selection: self.$exerciseValues.muscles)
-                    .navigationBarTitle("Select Muscles", displayMode: .inline)
+                    .navigationBarTitle("筋肉を選択", displayMode: .inline)
                     .navigationBarItems(trailing:
-                        Button("Done") {
+                        Button("完了") {
                             self.showingMuscleSelectionSheet = false
                         }
                     )
             }
-            .navigationViewStyle(StackNavigationViewStyle())
+            
         }
     }
 }
@@ -128,12 +128,12 @@ struct MuscleSelectionView: View {
     
     var body: some View {
         List(selection: $selection) {
-            Section(header: Text("Primary".uppercased())) {
+            Section(header: Text("主要".uppercased())) {
                 ForEach(primaryMuscles, id: \.self) { exerciseMuscle in
                     Text(exerciseMuscle.displayTitle)
                 }
             }
-            Section(header: Text("Secondary".uppercased())) {
+            Section(header: Text("補助".uppercased())) {
                 ForEach(secondaryMuscles, id: \.self) { exerciseMuscle in
                     Text(exerciseMuscle.displayTitle)
                 }

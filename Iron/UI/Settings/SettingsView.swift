@@ -15,23 +15,23 @@ struct SettingsView : View {
     private var mainSection: some View {
         Section {
             NavigationLink(destination: GeneralSettingsView(), isActive: $generalSelected) {
-                Text("General")
+                Text("一般")
             }
-            
+
             if HealthSettingsView.isSupported {
                 NavigationLink(destination: HealthSettingsView()) {
                     Text("Apple Health")
                 }
             }
-            
+
             if WatchSettingsView.isSupported {
                 NavigationLink(destination: WatchSettingsView()) {
                     Text("Apple Watch")
                 }
             }
-            
+
             NavigationLink(destination: BackupAndExportView()) {
-                Text("Backup & Export")
+                Text("バックアップ")
             }
         }
     }
@@ -40,7 +40,7 @@ struct SettingsView : View {
     private var aboutRatingAndSupportSection: some View {
         Section {
             NavigationLink(destination: AboutView()) {
-                Text("About")
+                Text("このアプリについて")
             }
 
             Button(action: {
@@ -48,34 +48,40 @@ struct SettingsView : View {
                 UIApplication.shared.open(writeReviewURL)
             }) {
                 HStack {
-                    Text("Rate Iron")
+                    Text("Nan Ton?を評価")
                     Spacer()
                     Image(systemName: "star")
+                        .accessibilityHidden(true)
                 }
             }
-            
+            .accessibilityLabel("Nan Ton?を評価")
+            .accessibilityHint("App Storeでレビューを書く")
+
             Button(action: {
                 guard MFMailComposeViewController.canSendMail() else {
                     self.showSupportMailAlert = true // fallback
                     return
                 }
-                
+
                 let mail = MFMailComposeViewController()
                 mail.mailComposeDelegate = MailCloseDelegate.shared
                 mail.setToRecipients(["iron@ka.codes"])
-                
+
                 // TODO: replace this hack with a proper way to retreive the rootViewController
                 guard let rootVC = UIApplication.shared.activeSceneKeyWindow?.rootViewController else { return }
                 rootVC.present(mail, animated: true)
             }) {
                 HStack {
-                    Text("Send Feedback")
+                    Text("フィードバックを送信")
                     Spacer()
                     Image(systemName: "paperplane")
+                        .accessibilityHidden(true)
                 }
             }
+            .accessibilityLabel("フィードバックを送信")
+            .accessibilityHint("メールでフィードバックを送る")
             .alert(isPresented: $showSupportMailAlert) {
-                Alert(title: Text("Support E-Mail"), message: Text("iron@ka.codes"))
+                Alert(title: Text("サポートメール"), message: Text("iron@ka.codes"))
             }
         }
     }
@@ -91,23 +97,21 @@ struct SettingsView : View {
     #endif
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 mainSection
-                
+
                 aboutRatingAndSupportSection
 
                 #if DEBUG
                 developerSettings
                 #endif
             }
-            .navigationBarTitle(Text("Settings"))
+            .navigationBarTitle(Text("設定"))
         }
-        .padding(.leading, UIDevice.current.userInterfaceIdiom == .pad ? 1 : 0) // hack that makes the master view show on iPad on portrait mode
     }
-    
-    // select the general tab by default on iPad
-    @State private var generalSelected = UIDevice.current.userInterfaceIdiom == .pad ? true : false
+
+    @State private var generalSelected = false
 }
 
 // hack because we can't store it in the View

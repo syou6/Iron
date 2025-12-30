@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nan Ton? - 筋トレ記録アプリ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 60px 20px;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .hero .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: -30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .feature {
+            text-align: center;
+            padding: 20px;
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .feature h3 {
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+        .feature p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .links a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .links a.secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        footer {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            opacity: 0.8;
+        }
+        footer a {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Nan Ton?</h1>
+        <p class="subtitle">何トン? - シンプルで強力な筋トレ記録アプリ</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">💪</div>
+                    <h3>ワークアウト記録</h3>
+                    <p>重量・レップ・セットを素早く記録。前回データの自動入力機能付き。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔥</div>
+                    <h3>3Dヒートマップ</h3>
+                    <p>鍛えた部位を3Dで可視化。ゲームのステータス画面のようなUI。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🏆</div>
+                    <h3>マイルストーン</h3>
+                    <p>「自由の女神を持ち上げた！」累計重量で達成感を演出。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>詳細な統計</h3>
+                    <p>週間/月間ボリューム、1RM推移、Progressive Overload追跡。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⌚</div>
+                    <h3>Apple Watch</h3>
+                    <p>手首からワークアウトを記録。iCloudで自動同期。</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🇯🇵</div>
+                    <h3>完全日本語</h3>
+                    <p>UIから種目名まで、すべて日本語対応。</p>
+                </div>
+            </div>
+
+            <div class="links">
+                <a href="https://apps.apple.com/app/id000000000">App Storeでダウンロード</a>
+                <a href="privacy.html" class="secondary">プライバシーポリシー</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Nan Ton? All rights reserved.</p>
+        <p><a href="privacy.html">プライバシーポリシー</a></p>
+    </footer>
+</body>
+</html>

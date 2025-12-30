@@ -15,9 +15,9 @@ enum WeightUnit: String, CaseIterable, Hashable {
     var title: String {
         switch self {
         case .metric:
-            return "Metric (kg)"
+            return "メトリック (kg)"
         case .imperial:
-            return "Imperial (lb)"
+            return "インペリアル (lb)"
         }
     }
     

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Iron</string>
+	<string>キントレ</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -28,7 +28,7 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.kabouzeid.ironbackup</string>
+				<string>com.shodev.kintore.backup</string>
 			</array>
 		</dict>
 	</array>
@@ -58,12 +58,12 @@
 	<string>Iron can save your finished workouts to Apple Health.</string>
 	<key>NSUbiquitousContainers</key>
 	<dict>
-		<key>iCloud.com.kabouzeid.Iron</key>
+		<key>iCloud.com.shodev.kintore</key>
 		<dict>
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
 			<key>NSUbiquitousContainerName</key>
-			<string>Iron</string>
+			<string>キントレ</string>
 			<key>NSUbiquitousContainerSupportedFolderLevels</key>
 			<string>Any</string>
 		</dict>
@@ -129,7 +129,7 @@
 				<string>iron_backup_file_images/iron_backup_file_320.png</string>
 			</array>
 			<key>UTTypeIdentifier</key>
-			<string>com.kabouzeid.ironbackup</string>
+			<string>com.shodev.kintore.backup</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

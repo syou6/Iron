@@ -93,18 +93,19 @@ struct WorkoutExerciseDetailView : View {
                 previousSet = workoutExercise.workoutSets![index - 1] as? WorkoutSet
             }
         } else { // first set
-            previousSet = workoutExerciseHistory.first?.workoutSets?.firstObject as? WorkoutSet
+            if settingsStore.autoFillLastRecord {
+                previousSet = workoutExerciseHistory.first?.workoutSets?.firstObject as? WorkoutSet
+            } else {
+                previousSet = nil
+            }
         }
         if let previousSet = previousSet {
             set.repetitionsValue = previousSet.repetitionsValue
             set.weightValue = previousSet.weightValue
         } else {
-            // TODO: let the user configure default repetitions and weight
-            set.repetitionsValue = 5
-            if workoutExercise.exercise(in: exerciseStore.exercises)?.type == .barbell {
-                let weightUnit = self.settingsStore.weightUnit
-                set.weightValue = WeightUnit.convert(weight: weightUnit.barbellWeight, from: weightUnit, to: .metric)
-            }
+            // Use default values from settings
+            set.repetitionsValue = Int16(settingsStore.defaultRepetitions)
+            set.weightValue = settingsStore.defaultWeight
         }
     }
     
@@ -223,7 +224,7 @@ struct WorkoutExerciseDetailView : View {
         }) {
             HStack {
                 Image(systemName: "plus")
-                Text("Add Set")
+                Text("セットを追加")
             }
         }
     }
@@ -281,7 +282,9 @@ struct WorkoutExerciseDetailView : View {
                     AudioServicesPlaySystemSound(1103) // Tink sound
                     
                     self.restTimerStore.restTimerDuration = self.restTimerDuration
-                    self.restTimerStore.restTimerStart = Date() // start the rest timer
+                    if self.settingsStore.autoStartRestTimer {
+                        self.restTimerStore.restTimerStart = Date() // start the rest timer
+                    }
                 }
                 self.select(set: self.firstUncompletedSet)
                 
@@ -296,7 +299,7 @@ struct WorkoutExerciseDetailView : View {
         VStack(spacing: 0) {
             List {
                 Section {
-                    TextField("Comment", text: workoutExerciseComment, onEditingChanged: { isEditingTextField in
+                    TextField("コメント", text: workoutExerciseComment, onEditingChanged: { isEditingTextField in
                         if !isEditingTextField {
                             self.adjustAndSaveWorkoutExerciseCommentInput()
                         }
@@ -357,7 +360,7 @@ struct WorkoutExerciseDetailView : View {
 #if DEBUG
 struct WorkoutExerciseDetailView_Previews : PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             WorkoutExerciseDetailView(workoutExercise: MockWorkoutData.metricRandom.workoutExercise)
                 .mockEnvironment(weightUnit: .metric)
         }

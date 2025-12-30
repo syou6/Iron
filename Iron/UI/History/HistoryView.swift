@@ -47,7 +47,7 @@ struct HistoryView : View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(workouts) { workout in
                     NavigationLink(destination: WorkoutDetailView(workout: workout)
@@ -58,15 +58,15 @@ struct HistoryView : View {
                                 // TODO add images when SwiftUI fixes the image size
                                 if UIDevice.current.userInterfaceIdiom != .pad {
                                     // not working on iPad, last checked iOS 13.4
-                                    Button("Share") {
+                                    Button("共有") {
                                         guard let logText = workout.logText(in: self.exerciseStore.exercises, weightUnit: self.settingsStore.weightUnit) else { return }
                                         self.activityItems = [logText]
                                     }
                                 }
-                                Button("Repeat") {
+                                Button("繰り返し") {
                                     WorkoutDetailView.repeatWorkout(workout: workout, settingsStore: self.settingsStore, sceneState: sceneState)
                                 }
-                                Button("Repeat (Blank)") {
+                                Button("繰り返し（空白）") {
                                     WorkoutDetailView.repeatWorkoutBlank(workout: workout, settingsStore: self.settingsStore, sceneState: sceneState)
                                 }
                         }
@@ -82,28 +82,28 @@ struct HistoryView : View {
             }
             .listStyleCompat_InsetGroupedListStyle()
             .navigationBarItems(trailing: EditButton())
-            .actionSheet(item: $offsetsToDelete) { offsets in
-                ActionSheet(title: Text("This cannot be undone."), buttons: [
-                    .destructive(Text("Delete Workout"), action: {
+            .confirmationDialog("この操作は取り消せません", isPresented: Binding(
+                get: { offsetsToDelete != nil },
+                set: { if !$0 { offsetsToDelete = nil } }
+            ), titleVisibility: .visible) {
+                Button("ワークアウトを削除", role: .destructive) {
+                    if let offsets = offsetsToDelete {
                         self.deleteAt(offsets: offsets)
-                    }),
-                    .cancel()
-                ])
+                    }
+                }
+                Button("キャンセル", role: .cancel) {
+                    offsetsToDelete = nil
+                }
             }
             // FIXME: .placeholder() suddenly crashes the app when the last workout is deleted (iOS 13.4)
             .placeholder(show: workouts.isEmpty,
-                         Text("Your finished workouts will appear here.")
+                         Text("完了したワークアウトがここに表示されます")
                             .multilineTextAlignment(.center)
                             .foregroundColor(.secondary)
                             .padding()
             )
-            .navigationBarTitle(Text("History"))
-            
-            // Placeholder
-            Text("No workout selected")
-                .foregroundColor(.secondary)
+            .navigationBarTitle(Text("履歴"))
         }
-        .padding(.leading, UIDevice.current.userInterfaceIdiom == .pad ? 1 : 0) // hack that makes the master view show on iPad on portrait mode
         .overlay(ActivitySheet(activityItems: self.$activityItems))
     }
 }
@@ -124,7 +124,7 @@ private struct WorkoutCell: View {
                 Text(workout.displayTitle(in: self.exerciseStore.exercises))
                     .font(.body)
                 
-                Text(Workout.dateFormatter.string(from: workout.start, fallback: "Unknown date"))
+                Text(Workout.dateFormatter.string(from: workout.start, fallback: "日付不明"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 

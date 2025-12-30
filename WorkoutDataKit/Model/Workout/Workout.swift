@@ -243,13 +243,13 @@ extension Workout {
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .short
         let dateString = "\(dateFormatter.string(from: start))"
-        let durationString = duration.map { "Duration: \(Self.durationFormatter.string(from: $0)!)" }
-        let weightString = "Total weight: \(formatter.string(from: Measurement(value: weight, unit: UnitMass.kilograms).converted(to: unit)))"
+        let durationString = duration.map { "時間: \(Self.durationFormatter.string(from: $0)!)" }
+        let weightString = "総重量: \(formatter.string(from: Measurement(value: weight, unit: UnitMass.kilograms).converted(to: unit)))"
         
         guard let workoutExercises = workoutExercisesWhereNotAllSetsAreUncompleted else { return nil }
         let exercisesDescription = workoutExercises
             .map { workoutExercise -> String in
-                let exerciseTitle = (workoutExercise.exercise(in: exercises)?.title ?? "Unknown Exercise")
+                let exerciseTitle = (workoutExercise.exercise(in: exercises)?.title ?? "不明な種目")
                 guard let workoutSets = workoutExercise.workoutSets else { return exerciseTitle }
                 let setsDescription = workoutSets
                     .compactMap { $0 as? WorkoutSet }

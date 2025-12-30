@@ -68,7 +68,17 @@ final class SettingsStore: ObservableObject {
             userDefaults.keepRestTimerRunning = newValue
         }
     }
-    
+
+    var autoStartRestTimer: Bool {
+        get {
+            userDefaults.autoStartRestTimer
+        }
+        set {
+            self.objectWillChange.send()
+            userDefaults.autoStartRestTimer = newValue
+        }
+    }
+
     var maxRepetitionsOneRepMax: Int {
         get {
             userDefaults.maxRepetitionsOneRepMax
@@ -96,6 +106,36 @@ final class SettingsStore: ObservableObject {
         set {
             self.objectWillChange.send()
             userDefaults.watchCompanion = newValue
+        }
+    }
+
+    var defaultWeight: Double {
+        get {
+            userDefaults.defaultWeight
+        }
+        set {
+            self.objectWillChange.send()
+            userDefaults.defaultWeight = newValue
+        }
+    }
+
+    var defaultRepetitions: Int {
+        get {
+            userDefaults.defaultRepetitions
+        }
+        set {
+            self.objectWillChange.send()
+            userDefaults.defaultRepetitions = newValue
+        }
+    }
+
+    var autoFillLastRecord: Bool {
+        get {
+            userDefaults.autoFillLastRecord
+        }
+        set {
+            self.objectWillChange.send()
+            userDefaults.autoFillLastRecord = newValue
         }
     }
 }

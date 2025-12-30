@@ -13,19 +13,19 @@ struct ActivityWorkoutsPerWeekCell : View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Activity")
+            Text("アクティビティ")
                 .bold()
                 .font(.subheadline)
                 .foregroundColor(.accentColor)
-            
+
             HStack {
-                Text("Workouts Per Week")
+                Text("週あたりのワークアウト")
                     .font(.headline)
-                
+
                 Spacer()
-                
+
                 if let mean = workoutsPerWeekMean {
-                    Text("Ø\(String(format: "%.1f", mean))")
+                    Text("平均\(String(format: "%.1f", mean))回")
                         .foregroundColor(.secondary)
                 }
             }

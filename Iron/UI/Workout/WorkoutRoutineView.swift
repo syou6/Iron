@@ -12,10 +12,11 @@ import WorkoutDataKit
 struct WorkoutRoutineView: View {
     @EnvironmentObject var exerciseStore: ExerciseStore
     @Environment(\.managedObjectContext) var managedObjectContext
-    
+
     @ObservedObject var workoutRoutine: WorkoutRoutine
-    
+
     @State private var showExerciseSelector = false
+    @State private var shareItems: [Any]?
     
     @State private var workoutRoutineTitleInput: String? = nil
     private var workoutRoutineTitle: Binding<String> {
@@ -76,22 +77,22 @@ struct WorkoutRoutineView: View {
     var body: some View {
         List {
             Section {
-                TextField("Title", text: workoutRoutineTitle, onEditingChanged: { isEditingTextField in
+                TextField("タイトル", text: workoutRoutineTitle, onEditingChanged: { isEditingTextField in
                     if !isEditingTextField {
                         self.adjustAndSaveWorkoutRoutineTitleInput()
                     }
                 })
-                TextField("Comment", text: workoutRoutineComment, onEditingChanged: { isEditingTextField in
+                TextField("コメント", text: workoutRoutineComment, onEditingChanged: { isEditingTextField in
                     if !isEditingTextField {
                         self.adjustAndSaveWorkoutRoutineCommentInput()
                     }
                 })
             }
-            Section(header: Text("Exercises".uppercased())) {
+            Section(header: Text("種目".uppercased())) {
                 ForEach(workoutRoutineExercises) { workoutRoutineExercise in
                     NavigationLink(destination: WorkoutRoutineExerciseView(workoutRoutineExercise: workoutRoutineExercise)) {
                         VStack(alignment: .leading) {
-                            Text(workoutRoutineExercise.exercise(in: self.exerciseStore.exercises)?.title ?? "Unknown Exercise")
+                            Text(workoutRoutineExercise.exercise(in: self.exerciseStore.exercises)?.title ?? "不明な種目")
                             workoutRoutineExercise.subtitle.map {
                                 Text($0)
                                     .foregroundColor(.secondary)
@@ -121,24 +122,49 @@ struct WorkoutRoutineView: View {
                 }) {
                     HStack {
                         Image(systemName: "plus")
-                        Text("Add Exercises")
+                        Text("種目を追加")
                     }
                 }
             }
         }
         .listStyleCompat_InsetGroupedListStyle()
         .navigationBarTitle(Text(workoutRoutine.displayTitle), displayMode: .inline)
-        .navigationBarItems(trailing: EditButton())
+        .navigationBarItems(trailing:
+            HStack(spacing: NAVIGATION_BAR_SPACING) {
+                Button(action: {
+                    shareRoutine()
+                }) {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .accessibilityLabel("共有")
+                EditButton()
+            }
+        )
         .sheet(isPresented: self.$showExerciseSelector) {
             self.exerciseSelectorSheet
         }
+        .overlay(ActivitySheet(activityItems: $shareItems))
+    }
+
+    private func shareRoutine() {
+        var text = "[\(workoutRoutine.displayTitle)]\n\n"
+
+        for (index, routineExercise) in workoutRoutineExercises.enumerated() {
+            let exerciseName = routineExercise.exercise(in: exerciseStore.exercises)?.title ?? "不明な種目"
+            let setsCount = routineExercise.workoutRoutineSets?.count ?? 0
+            text += "\(index + 1). \(exerciseName) - \(setsCount) セット\n"
+        }
+
+        text += "\n#NanTon #筋トレ"
+
+        shareItems = [text]
     }
 }
 
 #if DEBUG
 struct WorkoutRoutineView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             WorkoutRoutineView(workoutRoutine: MockWorkoutData.metric.workoutRoutine)
                 .mockEnvironment(weightUnit: .metric)
         }

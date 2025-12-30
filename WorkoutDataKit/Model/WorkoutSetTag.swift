@@ -16,11 +16,11 @@ public enum WorkoutSetTag: String, CaseIterable {
     public var title: String {
         switch self {
 //        case .warmUp:
-//            return "warm up"
+//            return "ウォームアップ"
         case .dropSet:
-            return "drop set"
+            return "ドロップセット"
         case .failure:
-            return "failure"
+            return "失敗"
         }
     }
 }

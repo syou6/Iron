@@ -96,10 +96,10 @@ struct WorkoutRoutineExerciseView: View {
         Button(action: {
             // get the lastSet before adding a new set
             let lastSet = self.workoutRoutineExercise.workoutRoutineSets?.lastObject as? WorkoutRoutineSet
-            
+
             let workoutRoutineSet = WorkoutRoutineSet.create(context: self.managedObjectContext)
             workoutRoutineSet.workoutRoutineExercise = self.workoutRoutineExercise
-            
+
             if let previousSet = lastSet {
                 workoutRoutineSet.minRepetitionsValue = previousSet.minRepetitionsValue
                 workoutRoutineSet.maxRepetitionsValue = previousSet.maxRepetitionsValue
@@ -107,12 +107,12 @@ struct WorkoutRoutineExerciseView: View {
                 workoutRoutineSet.minRepetitionsValue = 5
                 workoutRoutineSet.maxRepetitionsValue = 5
             }
-            
+
             self.managedObjectContext.saveOrCrash()
         }) {
             HStack {
                 Image(systemName: "plus")
-                Text("Add Set")
+                Text("セットを追加")
             }
         }
     }
@@ -147,7 +147,7 @@ struct WorkoutRoutineExerciseView: View {
         VStack(spacing: 0) {
             List {
                 Section {
-                    TextField("Comment", text: workoutRoutineExerciseComment, onEditingChanged: { isEditingTextField in
+                    TextField("コメント", text: workoutRoutineExerciseComment, onEditingChanged: { isEditingTextField in
                         if !isEditingTextField {
                             self.adjustAndSaveWorkoutRoutineExerciseCommentInput()
                         }

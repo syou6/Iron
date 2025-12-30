@@ -76,31 +76,31 @@ struct ExerciseDetailView : View {
     }
     
     private var closeSheetButton: some View {
-        Button("Close") {
+        Button("閉じる") {
             self.activeSheet = nil
         }
     }
-    
+
     private var exerciseHistorySheet: some View {
-        NavigationView {
+        NavigationStack {
             ExerciseHistoryView(exercise: self.exercise)
-                .navigationBarTitle("History", displayMode: .inline)
+                .navigationBarTitle("履歴", displayMode: .inline)
                 .navigationBarItems(leading: closeSheetButton)
                 .environmentObject(self.settingsStore)
                 .environment(\.managedObjectContext, self.managedObjectContext)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
     
     private var exerciseStatisticsSheet: some View {
-        NavigationView {
+        NavigationStack {
             ExerciseStatisticsView(exercise: self.exercise)
-                .navigationBarTitle("Statistics", displayMode: .inline)
+                .navigationBarTitle("統計", displayMode: .inline)
                 .navigationBarItems(leading: closeSheetButton)
                 .environmentObject(self.settingsStore)
                 .environment(\.managedObjectContext, self.managedObjectContext)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
     
     private func imageSection(geometry: GeometryProxy) -> some View {
@@ -118,12 +118,12 @@ struct ExerciseDetailView : View {
     }
     
     private var muscleSection: some View {
-        Section(header: Text("Muscles".uppercased())) {
+        Section(header: Text("筋肉".uppercased())) {
             ForEach(self.exercise.primaryMuscleCommonName, id: \.hashValue) { primaryMuscle in
                 HStack {
                     Text(primaryMuscle.capitalized)
                     Spacer()
-                    Text("Primary")
+                    Text("主要")
                         .foregroundColor(.secondary)
                 }
             }
@@ -131,7 +131,7 @@ struct ExerciseDetailView : View {
                 HStack {
                     Text(secondaryMuscle.capitalized)
                     Spacer()
-                    Text("Secondary")
+                    Text("補助")
                         .foregroundColor(.secondary)
                 }
             }
@@ -139,7 +139,7 @@ struct ExerciseDetailView : View {
     }
     
     private var stepsSection: some View {
-        Section(header: Text("Steps".uppercased())) {
+        Section(header: Text("手順".uppercased())) {
             ForEach(self.exercise.steps, id: \.hashValue) { step in
                 Text(step as String)
                     .lineLimit(nil)
@@ -148,7 +148,7 @@ struct ExerciseDetailView : View {
     }
     
     private var tipsSection: some View {
-        Section(header: Text("Tips".uppercased())) {
+        Section(header: Text("ヒント".uppercased())) {
             ForEach(self.exercise.tips, id: \.hashValue) { tip in
                 Text(tip as String)
                     .lineLimit(nil)
@@ -157,7 +157,7 @@ struct ExerciseDetailView : View {
     }
     
     private var referencesSection: some View {
-        Section(header: Text("References".uppercased())) {
+        Section(header: Text("参考".uppercased())) {
             ForEach(self.exercise.references, id: \.hashValue) { reference in
                 Button(reference as String) {
                     if let url = URL(string: reference) {
@@ -169,33 +169,11 @@ struct ExerciseDetailView : View {
     }
     
     private var aliasSection: some View {
-        Section(header: Text("Also known as".uppercased())) {
+        Section(header: Text("別名".uppercased())) {
             ForEach(self.exercise.alias, id: \.hashValue) { alias in
                 Text(alias)
             }
         }
-    }
-    
-    private var options: [ActionSheet.Button] {
-        var options: [ActionSheet.Button] = [
-            .default(Text("History"), action: {
-                self.activeSheet = .history
-            }),
-            .default(Text("Statistics"), action: {
-                self.activeSheet = .statistics
-            })
-        ]
-        if exerciseStore.isHidden(exercise: exercise) {
-            options.append(.default(Text("Unhide"), action: {
-                self.exerciseStore.show(exercise: self.exercise)
-            }))
-        } else if !exercise.isCustom {
-            options.append(.default(Text("Hide"), action: {
-                self.exerciseStore.hide(exercise: self.exercise)
-            }))
-        }
-        options.append(.cancel())
-        return options
     }
     
     var body: some View {
@@ -224,7 +202,7 @@ struct ExerciseDetailView : View {
                 if !self.exercise.references.isEmpty {
                     self.referencesSection
                 }
-                
+
                 if !self.exercise.alias.isEmpty {
                     self.aliasSection
                 }
@@ -234,8 +212,23 @@ struct ExerciseDetailView : View {
         .sheet(item: $activeSheet) { type in
             self.sheetView(type: type)
         }
-        .actionSheet(isPresented: $showOptionsMenu) {
-            ActionSheet(title: Text("Exercise"), message: nil, buttons: options)
+        .confirmationDialog("種目", isPresented: $showOptionsMenu, titleVisibility: .visible) {
+            Button("履歴") {
+                self.activeSheet = .history
+            }
+            Button("統計") {
+                self.activeSheet = .statistics
+            }
+            if exerciseStore.isHidden(exercise: exercise) {
+                Button("表示") {
+                    self.exerciseStore.show(exercise: self.exercise)
+                }
+            } else if !exercise.isCustom {
+                Button("非表示") {
+                    self.exerciseStore.hide(exercise: self.exercise)
+                }
+            }
+            Button("キャンセル", role: .cancel) { }
         }
         .navigationBarTitle(Text(exercise.title), displayMode: .inline)
         .navigationBarItems(trailing:
@@ -246,8 +239,10 @@ struct ExerciseDetailView : View {
                     Image(systemName: "ellipsis")
                         .padding([.leading, .top, .bottom])
                 }
+                .accessibilityLabel("オプション")
+                .accessibilityHint("履歴、統計などを表示")
                 if exercise.isCustom {
-                    Button("Edit") {
+                    Button("編集") {
                         self.activeSheet = .editExercise
                     }
                 }
@@ -259,7 +254,7 @@ struct ExerciseDetailView : View {
 #if DEBUG
 struct ExerciseDetailView_Previews : PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             ExerciseDetailView(exercise: ExerciseStore.shared.exercises.first(where: { $0.everkineticId == 99 })!)
                 .mockEnvironment(weightUnit: .metric)
         }

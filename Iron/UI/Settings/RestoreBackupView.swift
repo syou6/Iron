@@ -12,18 +12,53 @@ import WorkoutDataKit
 struct RestoreBackupView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @EnvironmentObject var exerciseStore: ExerciseStore
-    
+
     @ObservedObject var backupStore: BackupFileStore
-    
-    @State private var restoreResult: IdentifiableHolder<Result<Void, Error>>?
-    @State private var restoreBackupUrl: IdentifiableHolder<URL>?
-    
+
+    @State private var restoreResult: Result<Void, Error>?
+    @State private var restoreBackupUrl: URL?
+
+    private var alertTitle: String {
+        guard let result = restoreResult else { return "" }
+        switch result {
+        case .success:
+            return "復元成功"
+        case .failure:
+            return "復元失敗"
+        }
+    }
+
+    private var alertMessage: String {
+        guard let result = restoreResult else { return "" }
+        switch result {
+        case .success:
+            return ""
+        case .failure(let error):
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case let .dataCorrupted(context):
+                    return "データ破損: \(context.debugDescription)"
+                case let .keyNotFound(_, context):
+                    return "キーが見つかりません: \(context.debugDescription)"
+                case let .typeMismatch(_, context):
+                    return "型の不一致: \(context.debugDescription)"
+                case let .valueNotFound(_, context):
+                    return "値が見つかりません: \(context.debugDescription)"
+                @unknown default:
+                    return "デコードエラー: \(error.localizedDescription)"
+                }
+            } else {
+                return error.localizedDescription
+            }
+        }
+    }
+
     var body: some View {
         List {
-            Section(header: Text("Backups".uppercased()), footer: Text("Restore a backup by tapping on it.")) {
+            Section(header: Text("バックアップ".uppercased()), footer: Text("タップして復元します")) {
                 ForEach(backupStore.backups) { backup in
                     Button(action: {
-                        self.restoreBackupUrl = IdentifiableHolder(value: backup.url)
+                        self.restoreBackupUrl = backup.url
                     }) {
                         VStack(alignment: .leading) {
                             Text(BackupFileStore.BackupFile.dateFormatter.string(from: backup.creationDate))
@@ -39,10 +74,10 @@ struct RestoreBackupView: View {
                         self.backupStore.delete(at: index)
                     }
                 }
-                
+
                 // TODO: remove this once the .placeholder() works
                 if backupStore.backups.isEmpty {
-                    Button("Empty") {}
+                    Button("空") {}
                         .disabled(true)
                 }
             }
@@ -50,63 +85,36 @@ struct RestoreBackupView: View {
         .listStyleCompat_InsetGroupedListStyle()
         .onAppear(perform: backupStore.fetchBackups)
         .navigationBarItems(trailing: EditButton())
-        .actionSheet(item: $restoreBackupUrl) { urlHolder in
-            RestoreActionSheet.create(context: self.managedObjectContext, exerciseStore: self.exerciseStore, data: { try Data(contentsOf: urlHolder.value) }) { result in
-                self.restoreResult = IdentifiableHolder(value: result)
-            }
-        }
-        .alert(item: $restoreResult) { restoreResultHolder in
-            RestoreActionSheet.restoreResultAlert(restoreResult: restoreResultHolder.value)
-        }
-        .navigationBarTitle("Restore Backup", displayMode: .inline)
-    }
-}
-
-import CoreData
-enum RestoreActionSheet {
-    typealias RestoreResult = Result<Void, Error>
-    
-    static func create(context: NSManagedObjectContext, exerciseStore: ExerciseStore, data: @escaping () throws -> Data, completion: @escaping (RestoreResult) -> Void) -> ActionSheet {
-        ActionSheet(
-            title: Text("Restore Backup"),
-            message: Text("This cannot be undone. All your workouts and custom exercises will be replaced with the ones from the backup. Your settings are not affected."),
-            buttons: [
-                .destructive(Text("Restore"), action: {
-                    do {
-                        try IronBackup.restoreBackupData(data: data(), managedObjectContext: context, exerciseStore: exerciseStore)
-                        completion(.success(()))
-                    } catch {
-                        completion(.failure(error))
-                    }
-                }),
-                .cancel()
-            ]
-        )
-    }
-    
-    static func restoreResultAlert(restoreResult: RestoreResult) -> Alert {
-        switch restoreResult {
-        case .success():
-            return Alert(title: Text("Restore Successful"))
-        case .failure(let error):
-            let errorMessage: String
-            if let decodingError = error as? DecodingError {
-                switch decodingError {
-                case let .dataCorrupted(context):
-                    errorMessage = "Data corrupted. \(context.debugDescription)"
-                case let .keyNotFound(_, context):
-                    errorMessage = "Key not found. \(context.debugDescription)"
-                case let .typeMismatch(_, context):
-                    errorMessage = "Type mismatch. \(context.debugDescription)"
-                case let .valueNotFound(_, context):
-                    errorMessage = "Value not found. \(context.debugDescription)"
-                @unknown default:
-                    errorMessage = "Decoding error. \(error.localizedDescription)"
+        .confirmationDialog("バックアップ復元", isPresented: Binding(
+            get: { restoreBackupUrl != nil },
+            set: { if !$0 { restoreBackupUrl = nil } }
+        ), titleVisibility: .visible) {
+            Button("復元", role: .destructive) {
+                guard let url = restoreBackupUrl else { return }
+                do {
+                    let data = try Data(contentsOf: url)
+                    try IronBackup.restoreBackupData(data: data, managedObjectContext: managedObjectContext, exerciseStore: exerciseStore)
+                    restoreResult = .success(())
+                } catch {
+                    restoreResult = .failure(error)
                 }
-            } else {
-                errorMessage = error.localizedDescription
             }
-            return Alert(title: Text("Restore Failed"), message: Text(errorMessage))
+            Button("キャンセル", role: .cancel) {
+                restoreBackupUrl = nil
+            }
+        } message: {
+            Text("この操作は取り消せません。すべてのワークアウトとカスタム種目がバックアップの内容に置き換わります。設定は影響を受けません。")
         }
+        .alert(alertTitle, isPresented: Binding(
+            get: { restoreResult != nil },
+            set: { if !$0 { restoreResult = nil } }
+        )) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            if !alertMessage.isEmpty {
+                Text(alertMessage)
+            }
+        }
+        .navigationBarTitle("バックアップ復元", displayMode: .inline)
     }
 }

@@ -22,7 +22,7 @@ public class WorkoutRoutine: NSManagedObject, Codable {
     public var fallbackTitle: String? {
         guard let index = workoutPlan?.workoutRoutines?.index(of: self), index != NSNotFound else { return nil }
         guard let letters = toLetters(from: index) else { return nil }
-        return "Routine \(letters)"
+        return "ルーティン \(letters)"
     }
     
     private func toLetters(from index: Int) -> String? {
@@ -47,7 +47,7 @@ public class WorkoutRoutine: NSManagedObject, Codable {
 
     
     public var displayTitle: String {
-        title ?? fallbackTitle ?? "Workout Routine"
+        title ?? fallbackTitle ?? "ワークアウトルーティン"
     }
     
     public func subtitle(in exercises: [Exercise]) -> String {
@@ -56,7 +56,7 @@ public class WorkoutRoutine: NSManagedObject, Codable {
             .compactMap { $0.exercise(in: exercises)?.title }
             .joined(separator: ", ") ?? ""
         
-        return s.isEmpty ? "Empty" : s
+        return s.isEmpty ? "空" : s
     }
     
     public func createWorkout(context: NSManagedObjectContext) -> Workout {
@@ -90,7 +90,36 @@ public class WorkoutRoutine: NSManagedObject, Codable {
         addToWorkouts(workout)
         return workout
     }
-    
+
+    public func duplicate(context: NSManagedObjectContext) -> WorkoutRoutine {
+        let workoutRoutineCopy = WorkoutRoutine.create(context: context)
+        workoutRoutineCopy.title = self.title.map { $0 + " (コピー)" }
+        workoutRoutineCopy.comment = self.comment
+        workoutRoutineCopy.workoutRoutineExercises = NSOrderedSet(array:
+            workoutRoutineExercises?
+                .compactMap { $0 as? WorkoutRoutineExercise }
+                .map { workoutRoutineExercise in
+                    let workoutRoutineExerciseCopy = WorkoutRoutineExercise.create(context: context)
+                    workoutRoutineExerciseCopy.exerciseUuid = workoutRoutineExercise.exerciseUuid
+                    workoutRoutineExerciseCopy.comment = workoutRoutineExercise.comment
+                    workoutRoutineExerciseCopy.workoutRoutineSets = NSOrderedSet(array:
+                        workoutRoutineExercise.workoutRoutineSets?
+                            .compactMap { $0 as? WorkoutRoutineSet }
+                            .map { workoutRoutineSet in
+                                let workoutRoutineSetCopy = WorkoutRoutineSet.create(context: context)
+                                workoutRoutineSetCopy.maxRepetitions = workoutRoutineSet.maxRepetitions
+                                workoutRoutineSetCopy.minRepetitions = workoutRoutineSet.minRepetitions
+                                workoutRoutineSetCopy.tagValue = workoutRoutineSet.tagValue
+                                workoutRoutineSetCopy.comment = workoutRoutineSet.comment
+                                return workoutRoutineSetCopy
+                            }
+                        ?? [])
+                    return workoutRoutineExerciseCopy
+                }
+            ?? [])
+        return workoutRoutineCopy
+    }
+
     // MARK: - Codable
     
        private enum CodingKeys: String, CodingKey {

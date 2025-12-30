@@ -32,20 +32,20 @@ struct EditCurrentWorkoutTimeView: View {
         List {
             Section {
                 DatePicker(selection: $workout.safeStart, in: ...min(workout.safeEnd, Date())) {
-                    Text("Start")
+                    Text("開始")
                 }
-                
-                Toggle("Automatic Time Tracking", isOn: automaticTimeTracking)
+
+                Toggle("自動時間記録", isOn: automaticTimeTracking)
 
                 if !automaticTimeTracking.wrappedValue {
                     DatePicker(selection: $workout.safeEnd, in: workout.safeStart...Date()) {
-                        Text("End")
+                        Text("終了")
                     }
                 }
             }
-            
+
             Section {
-                Button("Reset Start Time") {
+                Button("開始時刻をリセット") {
                     let newStart = Date()
                     if let end = self.workout.end, end < newStart {
                         self.workout.end = newStart

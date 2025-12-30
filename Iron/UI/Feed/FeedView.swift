@@ -41,20 +41,36 @@ struct FeedView : View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     ActivityCalendarViewCell()
                 }
-                
+
                 Section {
                     ActivityWorkoutsPerWeekCell()
                 }
-                
+
                 Section {
                     ActivitySummaryLast7DaysCell()
                 }
-                
+
+                Section {
+                    VolumeStatsCell()
+                }
+
+                Section {
+                    ProgressiveOverloadCell()
+                }
+
+                Section {
+                    MuscleHeatMap3DCell()
+                }
+
+                Section {
+                    EpicMilestonesCell()
+                }
+
                 ForEach(pinnedChartsStore.pinnedCharts, id: \.self) { chart in
                     if let exercise = self.exerciseStore.find(with: chart.exerciseUuid) {
                         Section {
@@ -68,18 +84,18 @@ struct FeedView : View {
                 }) {
                     HStack {
                         Image(systemName: "plus")
-                        Text("Pin Chart")
+                            .accessibilityHidden(true)
+                        Text("チャートを固定")
                     }
                 }
             }
             .listStyleCompat_InsetGroupedListStyle()
-            .navigationBarTitle(Text("Feed"))
-            .navigationBarItems(trailing: Button("Edit") { activeSheet = .pinnedChartEditor })
+            .navigationBarTitle(Text("ホーム"))
+            .navigationBarItems(trailing: Button("編集") { activeSheet = .pinnedChartEditor })
             .sheet(item: $activeSheet) { type in
                 sheetView(type: type)
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -91,13 +107,13 @@ private struct PinnedChartEditSheet: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            SheetBar(title: "Edit Charts", leading: Button("Close") { self.presentationMode.wrappedValue.dismiss() }, trailing: EmptyView()).padding()
+            SheetBar(title: "チャート編集", leading: Button("閉じる") { self.presentationMode.wrappedValue.dismiss() }, trailing: EmptyView()).padding()
             
             Divider()
             
             List {
                 ForEach(pinnedChartsStore.pinnedCharts, id: \.self) { chart in
-                    Text((exerciseStore.find(with: chart.exerciseUuid)?.title ?? "Unknown Exercise") + " (\(chart.measurementType.title))")
+                    Text((exerciseStore.find(with: chart.exerciseUuid)?.title ?? "不明な種目") + " (\(chart.measurementType.title))")
                 }
                 .onDelete { offsets in
                     self.pinnedChartsStore.pinnedCharts.remove(atOffsets: offsets)
@@ -110,12 +126,12 @@ private struct PinnedChartEditSheet: View {
             .placeholder(show: pinnedChartsStore.pinnedCharts.isEmpty,
                          VStack {
                             Spacer()
-                            
-                            Text("You don't have any charts pinned.")
+
+                            Text("固定したチャートはありません")
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(.secondary)
                                 .padding()
-                            
+
                             Spacer()
                          }
             )
@@ -145,49 +161,44 @@ private struct PinnedChartSelectorSheet: View {
         self.filter.filter = ""
     }
     
-    private func actionButtons(exercise: Exercise) -> [ActionSheet.Button] {
-        WorkoutExerciseChartData.MeasurementType.allCases.compactMap { measurementType in
+    private var availableMeasurementTypes: [WorkoutExerciseChartData.MeasurementType] {
+        guard let exercise = selectedExercise else { return [] }
+        return WorkoutExerciseChartData.MeasurementType.allCases.filter { measurementType in
             let pinnedChart = PinnedChart(exerciseUuid: exercise.uuid, measurementType: measurementType)
-            if self.pinnedChartsStore.pinnedCharts.contains(pinnedChart) {
-                return nil
-            } else {
-                return .default(Text(measurementType.title)) {
+            return !pinnedChartsStore.pinnedCharts.contains(pinnedChart)
+        }
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 0) {
+                SheetBar(title: "チャートを固定", leading: Button("キャンセル") { self.resetAndDismiss() }, trailing: EmptyView())
+                TextField("検索", text: $filter.filter)
+                    .textFieldStyle(SearchTextFieldStyle(text: $filter.filter))
+                    .padding(.top)
+            }.padding()
+
+            Divider()
+
+            ExerciseSingleSelectionView(exerciseGroups: filter.exerciseGroups) { exercise in
+                self.selectedExercise = exercise
+            }
+        }
+        .confirmationDialog(selectedExercise?.title ?? "", isPresented: Binding(
+            get: { selectedExercise != nil },
+            set: { if !$0 { selectedExercise = nil } }
+        ), titleVisibility: .visible) {
+            ForEach(availableMeasurementTypes, id: \.self) { measurementType in
+                Button(measurementType.title) {
+                    guard let exercise = selectedExercise else { return }
+                    let pinnedChart = PinnedChart(exerciseUuid: exercise.uuid, measurementType: measurementType)
                     self.onSelection(pinnedChart)
                     self.resetAndDismiss()
                 }
             }
-        } + [.cancel()]
-    }
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            VStack(spacing: 0) {
-                SheetBar(title: "Pin Chart", leading: Button("Cancel") { self.resetAndDismiss() }, trailing: EmptyView())
-                TextField("Search", text: $filter.filter)
-                    .textFieldStyle(SearchTextFieldStyle(text: $filter.filter))
-                    .padding(.top)
-            }.padding()
-            
-            Divider()
-            
-            ExerciseSingleSelectionView(exerciseGroups: filter.exerciseGroups) { exercise in
-                guard UIDevice.current.userInterfaceIdiom != .pad else { // TODO: actionSheet not supported on iPad yet (13.2)
-                    // for now just add the first measuremnt type
-                    for measurementType in WorkoutExerciseChartData.MeasurementType.allCases {
-                        let pinnedChart = PinnedChart(exerciseUuid: exercise.uuid, measurementType: measurementType)
-                        if !self.pinnedChartsStore.pinnedCharts.contains(pinnedChart) {
-                            self.onSelection(pinnedChart)
-                            self.resetAndDismiss()
-                            return
-                        }
-                    }
-                    return
-                }
-                self.selectedExercise = exercise
+            Button("キャンセル", role: .cancel) {
+                selectedExercise = nil
             }
-        }
-        .actionSheet(item: $selectedExercise) { exercise in
-            ActionSheet(title: Text(exercise.title), message: nil, buttons: actionButtons(exercise: exercise))
         }
     }
 }

@@ -15,9 +15,13 @@ extension UserDefaults {
         case defaultRestTimeDumbbellBased
         case defaultRestTimeBarbellBased
         case keepRestTimerRunning
+        case autoStartRestTimer
         case maxRepetitionsOneRepMax
         case autoBackup
         case watchCompanion
+        case defaultWeight
+        case defaultRepetitions
+        case autoFillLastRecord
     }
 
     var weightUnit: WeightUnit {
@@ -71,7 +75,16 @@ extension UserDefaults {
             self.value(forKey: SettingsKeys.keepRestTimerRunning.rawValue) as? Bool ?? true // default true
         }
     }
-    
+
+    var autoStartRestTimer: Bool {
+        set {
+            self.set(newValue, forKey: SettingsKeys.autoStartRestTimer.rawValue)
+        }
+        get {
+            self.value(forKey: SettingsKeys.autoStartRestTimer.rawValue) as? Bool ?? true // default true
+        }
+    }
+
     var maxRepetitionsOneRepMax: Int {
         set {
             self.set(newValue, forKey: SettingsKeys.maxRepetitionsOneRepMax.rawValue)
@@ -98,6 +111,35 @@ extension UserDefaults {
             self.value(forKey: SettingsKeys.watchCompanion.rawValue) as? Bool ?? true // default true
         }
     }
+
+    var defaultWeight: Double {
+        set {
+            self.set(newValue, forKey: SettingsKeys.defaultWeight.rawValue)
+        }
+        get {
+            self.value(forKey: SettingsKeys.defaultWeight.rawValue) as? Double ?? 20.0 // default 20kg
+        }
+    }
+
+    var defaultRepetitions: Int {
+        set {
+            self.set(newValue, forKey: SettingsKeys.defaultRepetitions.rawValue)
+        }
+        get {
+            self.value(forKey: SettingsKeys.defaultRepetitions.rawValue) as? Int ?? 10 // default 10 reps
+        }
+    }
+
+    var autoFillLastRecord: Bool {
+        set {
+            self.set(newValue, forKey: SettingsKeys.autoFillLastRecord.rawValue)
+        }
+        get {
+            self.value(forKey: SettingsKeys.autoFillLastRecord.rawValue) as? Bool ?? true // default true
+        }
+    }
 }
 
 let maxRepetitionsOneRepMaxValues = 1...10
+let defaultWeightValues: [Double] = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100]
+let defaultRepetitionsValues = 1...20

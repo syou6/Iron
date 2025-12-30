@@ -138,7 +138,7 @@ struct WorkoutRoutineSetEditor: View {
     private var repetitionsMinDragger: some View {
         Dragger(
             value: draggerRepetitionsMin,
-            unit: "min reps",
+            unit: "最小回",
             minValue: 0,
             maxValue: Double(WorkoutSet.MAX_REPETITIONS),
             nilPosition: .belowMin,
@@ -159,7 +159,7 @@ struct WorkoutRoutineSetEditor: View {
     private var repetitionsMaxDragger: some View {
         Dragger(
             value: draggerRepetitionsMax,
-            unit: "max reps",
+            unit: "最大回",
             minValue: 0,
             maxValue: Double(WorkoutSet.MAX_REPETITIONS),
             nilPosition: .belowMin,
@@ -194,7 +194,7 @@ struct WorkoutRoutineSetEditor: View {
         }) {
             HStack {
                 Spacer()
-                Text(showNext ? "Next" : "Ok")
+                Text(showNext ? "次へ" : "OK")
                     .fixedSize()
                     .foregroundColor(.white)
                     .padding(6)
@@ -208,21 +208,21 @@ struct WorkoutRoutineSetEditor: View {
     }
     
     private var moreSheet: some View {
-        var title = "Set"
+        var title = "セット"
         if let index = workoutRoutineSet.workoutRoutineExercise?.workoutRoutineSets?.index(of: workoutRoutineSet), index != NSNotFound {
             title += " \(index + 1)"
         }
-        
-        return NavigationView {
+
+        return NavigationStack {
             MoreView(workoutRoutineSet: workoutRoutineSet)
                 .navigationBarTitle(Text(title), displayMode: .inline)
                 .navigationBarItems(leading:
-                    Button("Close") {
+                    Button("閉じる") {
                         self.showMoreSheet = false
                     }
             )
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
     
     private var keyboard: some View {
@@ -329,7 +329,7 @@ struct WorkoutRoutineSetEditor: View {
             })
         )
         .sheet(isPresented: $showMoreSheet) { self.moreSheet }
-        .alert(isPresented: $showHelpAlert) { Alert(title: Text("You can also drag ☰ up and down to adjust the values.")) }
+        .alert(isPresented: $showHelpAlert) { Alert(title: Text("☰を上下にドラッグして値を調整できます。")) }
     }
 }
 
@@ -380,14 +380,14 @@ private struct MoreView: View {
     
     var body: some View {
         List {
-            Section(header: Text("Tag".uppercased())) {
+            Section(header: Text("タグ".uppercased())) {
                 ForEach(WorkoutRoutineSet.supportedTags, id: \.self) { tag in
                     self.tagButton(tag: tag)
                 }
             }
-            
-            Section(header: Text("Comment".uppercased())) {
-                TextField("Comment", text: workoutRoutineSetComment, onEditingChanged: { isEditingTextField in
+
+            Section(header: Text("コメント".uppercased())) {
+                TextField("コメント", text: workoutRoutineSetComment, onEditingChanged: { isEditingTextField in
                     if !isEditingTextField {
                         self.adjustAndSaveWorkoutRoutineSetCommentInput()
                     }

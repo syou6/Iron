@@ -13,11 +13,12 @@ import os.log
 
 struct StartWorkoutView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    
+
     @State private var quote = Quotes.quotes.randomElement()
-    
+
     @State private var offsetsToDelete: IndexSet?
-    
+    @State private var showPresetSheet = false
+
     @FetchRequest(fetchRequest: StartWorkoutView.fetchRequest) var workoutPlans
 
     static var fetchRequest: NSFetchRequest<WorkoutPlan> {
@@ -27,7 +28,7 @@ struct StartWorkoutView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 if #available(iOS 15.0, *) {
                     Button {
@@ -35,7 +36,7 @@ struct StartWorkoutView: View {
                     } label: {
                         HStack {
                             Spacer()
-                            Text("Start Workout").font(.headline)
+                            Text("ワークアウト開始").font(.headline)
                             Spacer()
                         }
                         .padding(6)
@@ -49,7 +50,7 @@ struct StartWorkoutView: View {
                     } label: {
                         HStack {
                             Spacer()
-                            Text("Start Workout").font(.headline)
+                            Text("ワークアウト開始").font(.headline)
                             Spacer()
                         }
                         .padding(6)
@@ -80,23 +81,42 @@ struct StartWorkoutView: View {
                     }) {
                         HStack {
                             Image(systemName: "plus")
-                            Text("New Workout Plan")
+                                .accessibilityHidden(true)
+                            Text("新規プラン")
+                        }
+                    }
+
+                    Button(action: {
+                        self.showPresetSheet = true
+                    }) {
+                        HStack {
+                            Image(systemName: "list.bullet.rectangle")
+                                .accessibilityHidden(true)
+                            Text("プリセットから追加")
                         }
                     }
                 }
             }
             .listStyleCompat_InsetGroupedListStyle()
-            .navigationBarTitle("Workout")
-            .actionSheet(item: $offsetsToDelete) { offsets in
-                ActionSheet(title: Text("This cannot be undone."), buttons: [
-                    .destructive(Text("Delete Workout Plan"), action: {
+            .navigationBarTitle("ワークアウト")
+            .sheet(isPresented: $showPresetSheet) {
+                PresetProgramSheet()
+            }
+            .confirmationDialog("この操作は取り消せません", isPresented: Binding(
+                get: { offsetsToDelete != nil },
+                set: { if !$0 { offsetsToDelete = nil } }
+            ), titleVisibility: .visible) {
+                Button("プランを削除", role: .destructive) {
+                    if let offsets = offsetsToDelete {
                         self.deleteAt(offsets: offsets)
-                    }),
-                    .cancel()
-                ])
+                    }
+                }
+                Button("キャンセル", role: .cancel) {
+                    offsetsToDelete = nil
+                }
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
     
     private func newWorkoutPlan() {
@@ -138,14 +158,14 @@ private struct WorkoutPlanCell: View {
                     _ = self.workoutPlan.duplicate(context: self.managedObjectContext)
                     self.managedObjectContext.saveOrCrash()
                 }) {
-                    Text("Duplicate")
+                    Text("複製")
                     Image(systemName: "doc.on.doc")
                 }
                 Button(action: {
                     self.managedObjectContext.delete(self.workoutPlan)
                     self.managedObjectContext.saveOrCrash()
                 }) {
-                    Text("Delete")
+                    Text("削除")
                     Image(systemName: "trash")
                 }
             }

@@ -20,7 +20,7 @@ struct AddExercisesSheet: View {
     @State private var exerciseSelectorSelection: Set<Exercise> = Set()
     
     init(exercises: [Exercise], recentExercises: [Exercise], onAdd: @escaping (Set<Exercise>) -> Void) {
-        let recentExercisesGroup = ExerciseGroup(title: "Recent", exercises: recentExercises)
+        let recentExercisesGroup = ExerciseGroup(title: "最近", exercises: recentExercises)
         let exerciseGroups = ExerciseStore.splitIntoMuscleGroups(exercises: exercises)
         self.filter = ExerciseGroupFilter(exerciseGroups: recentExercisesGroup.exercises.isEmpty ? exerciseGroups : [recentExercisesGroup] + exerciseGroups)
         self.onAdd = onAdd
@@ -59,19 +59,19 @@ struct AddExercisesSheet: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
-                SheetBar(title: "Add Exercises",
+                SheetBar(title: "種目を追加",
                     leading:
-                    Button("Cancel") {
+                    Button("キャンセル") {
                         self.resetAndDismiss()
                     },
                     trailing:
-                    Button("Add") {
+                    Button("追加") {
                         self.onAdd(self.exerciseSelectorSelection)
                         self.resetAndDismiss()
                     }
                     .environment(\.isEnabled, !self.exerciseSelectorSelection.isEmpty)
                 )
-                TextField("Search", text: $filter.filter)
+                TextField("検索", text: $filter.filter)
                     .textFieldStyle(SearchTextFieldStyle(text: $filter.filter))
                     .padding(.top)
             }.padding()

@@ -34,27 +34,27 @@ struct TimerBannerView: View {
     }()
     
     private var closeSheetButton: some View {
-        Button("Close") {
+        Button("閉じる") {
             self.activeSheet = nil
         }
     }
-    
+
     private var editTimeSheet: some View {
-        NavigationView {
+        NavigationStack {
             EditCurrentWorkoutTimeView(workout: workout)
-                .navigationBarTitle("Workout Duration", displayMode: .inline)
+                .navigationBarTitle("ワークアウト時間", displayMode: .inline)
                 .navigationBarItems(leading: closeSheetButton)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
-    
+
     private var restTimerSheet: some View {
-        NavigationView {
+        NavigationStack {
             RestTimerView().environmentObject(self.restTimerStore)
-                .navigationBarTitle("Rest Timer", displayMode: .inline)
+                .navigationBarTitle("休憩タイマー", displayMode: .inline)
                 .navigationBarItems(leading: closeSheetButton)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
     
     var body: some View {
@@ -69,6 +69,9 @@ struct TimerBannerView: View {
                 }
                 .padding()
             }
+            .accessibilityLabel("ワークアウト時間")
+            .accessibilityValue(workoutTimerDurationFormatter.string(from: workout.safeDuration) ?? "")
+            .accessibilityHint("タップして時間を編集")
 
             Spacer()
 
@@ -86,6 +89,9 @@ struct TimerBannerView: View {
                 .foregroundColor(remainingTime ?? 0 < 0 ? .red : nil)
                 .padding()
             }
+            .accessibilityLabel("休憩タイマー")
+            .accessibilityValue(restTimerStore.restTimerRemainingTime.map { restTimerDurationFormatter.string(from: abs($0.rounded(.up))) ?? "" } ?? "未設定")
+            .accessibilityHint("タップしてタイマーを設定")
         }
         .background(Color(.systemFill).opacity(0.5))
 //        .background(VisualEffectView(effect: UIBlurEffect(style: .systemMaterial)))

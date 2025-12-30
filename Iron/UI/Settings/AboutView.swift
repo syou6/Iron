@@ -18,10 +18,10 @@ struct AboutView: View {
                     .frame(height: 80)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Iron \(versionString)")
+                    Text("キントレ \(versionString)")
                         .font(.headline)
-                    
-                    Text("by Karim Abou Zeid")
+
+                    Text("開発者: Karim Abou Zeid")
                         .font(.subheadline)
                 }
                 .padding()
@@ -33,11 +33,11 @@ struct AboutView: View {
                     UIApplication.shared.open(URL(string: "https://github.com/kabouzeid/Iron")!)
                 }) {
                     if #available(iOS 14.0, *) {
-                        Label("Source Code", image: "github.fill")
+                        Label("ソースコード", image: "github.fill")
                     } else {
                         HStack {
                             Image("github.fill")
-                            Text("Source Code")
+                            Text("ソースコード")
                         }
                     }
                 }
@@ -59,11 +59,11 @@ struct AboutView: View {
                     UIApplication.shared.open(URL(string: "https://ka.codes")!)
                 }) {
                     if #available(iOS 14.0, *) {
-                        Label("Website", systemImage: "globe")
+                        Label("ウェブサイト", systemImage: "globe")
                     } else {
                         HStack {
                             Image(systemName: "globe")
-                            Text("Website")
+                            Text("ウェブサイト")
                         }
                     }
                 }
@@ -74,17 +74,17 @@ struct AboutView: View {
                     UIApplication.shared.open(URL(string: "https://iron.ka.codes/privacy.html")!)
                 } label: {
                     if #available(iOS 14.0, *) {
-                        Label("Privacy Policy", systemImage: "hand.raised")
+                        Label("プライバシーポリシー", systemImage: "hand.raised")
                     } else {
                         HStack {
                             Image("hand.raised")
-                            Text("Privacy Policy")
+                            Text("プライバシーポリシー")
                         }
                     }
                 }
             }
         }
-        .navigationBarTitle("About", displayMode: .inline)
+        .navigationBarTitle("このアプリについて", displayMode: .inline)
     }
     
     private var versionString: String {
@@ -101,7 +101,7 @@ struct AboutView: View {
 #if DEBUG
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             AboutView().mockEnvironment(weightUnit: .metric)
         }
     }

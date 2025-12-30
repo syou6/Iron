@@ -92,13 +92,13 @@ struct WorkoutSetEditor : View {
     }
     
     private var doneButton: some View {
-        textButton(label: Text(workoutSet.isCompleted ? "Ok" : "Complete Set").foregroundColor(.white), color: .accentColor, action: {
+        textButton(label: Text(workoutSet.isCompleted ? "OK" : "セット完了").foregroundColor(.white), color: .accentColor, action: {
             self.onDone()
         })
     }
-    
+
     private var nextButton: some View {
-        textButton(label: Text("Next").foregroundColor(.white), color: .accentColor, action: { self.showKeyboard = .repetitions })
+        textButton(label: Text("次へ").foregroundColor(.white), color: .accentColor, action: { self.showKeyboard = .repetitions })
     }
         
     private var hideKeyboardButton: some View {
@@ -165,7 +165,7 @@ struct WorkoutSetEditor : View {
     private var repetitionsDragger: some View {
         Dragger(
             value: workoutSetRepetitions,
-            unit: "reps",
+            unit: "回",
             minValue: 0,
             maxValue: Double(WorkoutSet.MAX_REPETITIONS),
             showCursor: showKeyboard == .repetitions,
@@ -181,16 +181,16 @@ struct WorkoutSetEditor : View {
     }
     
     private var moreSheet: some View {
-        NavigationView {
+        NavigationStack {
             MoreView(workoutSet: workoutSet)
                 .navigationBarTitle(Text(workoutSet.displayTitle(weightUnit: settingsStore.weightUnit)), displayMode: .inline)
                 .navigationBarItems(leading:
-                    Button("Close") {
+                    Button("閉じる") {
                         self.showMoreSheet = false
                     }
             )
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
     }
     
     private var keyboard: some View {
@@ -296,7 +296,7 @@ struct WorkoutSetEditor : View {
             })
         )
         .sheet(isPresented: $showMoreSheet) { self.moreSheet }
-        .alert(isPresented: $showHelpAlert) { Alert(title: Text("You can also drag ☰ up and down to adjust the values.")) }
+        .alert(isPresented: $showHelpAlert) { Alert(title: Text("☰を上下にドラッグして値を調整できます。")) }
     }
 }
 
@@ -305,20 +305,9 @@ private struct MoreView: View {
     
     @State private var activeAlert: AlertType?
     
-    private enum AlertType: Identifiable {
+    private enum AlertType {
         case tagInfo
         case rpeInfo
-        
-        var id: Self { self }
-    }
-    
-    private func alertFor(type: AlertType) -> Alert {
-        switch type {
-        case .tagInfo:
-            return Alert(title: Text("Mark a set as Failure if you've tried to do more reps but failed."))
-        case .rpeInfo:
-            return Alert(title: Text("The rating of perceived exertion (RPE) is a way to determine and regulate your workout intensity."))
-        }
     }
     
     @State private var workoutSetCommentInput: String? // cannot use ValueHolder here, since it would be recreated on changes
@@ -389,7 +378,7 @@ private struct MoreView: View {
         List {
             Section(header:
                 HStack {
-                    Text("Tag".uppercased())
+                    Text("タグ".uppercased())
                     Spacer()
                     Button(action: {
                         self.activeAlert = .tagInfo
@@ -402,18 +391,18 @@ private struct MoreView: View {
                     self.tagButton(tag: tag)
                 }
             }
-            
-            Section(header: Text("Comment".uppercased())) {
-                TextField("Comment", text: workoutSetComment, onEditingChanged: { isEditingTextField in
+
+            Section(header: Text("コメント".uppercased())) {
+                TextField("コメント", text: workoutSetComment, onEditingChanged: { isEditingTextField in
                     if !isEditingTextField {
                         self.adjustAndSaveWorkoutSetCommentInput()
                     }
                 })
             }
-            
+
             Section(header:
                 HStack {
-                    Text("RPE (Rating of Perceived Exertion)")
+                    Text("RPE（主観的運動強度）")
                     Spacer()
                     Button(action: {
                         self.activeAlert = .rpeInfo
@@ -428,7 +417,22 @@ private struct MoreView: View {
             }
         }
         .listStyleCompat_InsetGroupedListStyle()
-        .alert(item: $activeAlert) { self.alertFor(type: $0) }
+        .alert("タグについて", isPresented: Binding(
+            get: { activeAlert == .tagInfo },
+            set: { if !$0 { activeAlert = nil } }
+        )) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("もっとレップを行おうとしたが失敗した場合、セットを「失敗」としてマークします。")
+        }
+        .alert("RPEについて", isPresented: Binding(
+            get: { activeAlert == .rpeInfo },
+            set: { if !$0 { activeAlert = nil } }
+        )) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("主観的運動強度（RPE）は、ワークアウトの強度を決定・調整する方法です。")
+        }
     }
 }
 

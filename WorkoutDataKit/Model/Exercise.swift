@@ -51,43 +51,43 @@ extension Exercise {
     }
     
     private static var commonMuscleNames: [String : String] = [
-        "abdominals": "abdominals",
-        "biceps brachii": "biceps",
-        "deltoid": "shoulders",
-        "erector spinae": "lower back",
-        "gastrocnemius": "calves",
-        "soleus": "calves",
-        "glutaeus maximus": "glutes",
-        "ischiocrural muscles": "hamstrings",
-        "latissimus dorsi": "latissimus",
-        "obliques": "obliques",
-        "pectoralis major": "chest",
-        "quadriceps": "quadriceps",
-        "trapezius": "trapezius",
-        "triceps brachii": "triceps"
+        "abdominals": "腹筋",
+        "biceps brachii": "上腕二頭筋",
+        "deltoid": "肩",
+        "erector spinae": "脊柱起立筋",
+        "gastrocnemius": "ふくらはぎ",
+        "soleus": "ふくらはぎ",
+        "glutaeus maximus": "臀筋",
+        "ischiocrural muscles": "ハムストリング",
+        "latissimus dorsi": "広背筋",
+        "obliques": "腹斜筋",
+        "pectoralis major": "胸",
+        "quadriceps": "大腿四頭筋",
+        "trapezius": "僧帽筋",
+        "triceps brachii": "上腕三頭筋"
     ]
     
     private static var muscleGroupNames: [String : String] = [
-        // abs
-        "abdominals": "abdominals",
-        "obliques": "abdominals",
-        // arms
-        "biceps brachii": "arms",
-        "triceps brachii": "arms",
-        // shoulders
-        "deltoid": "shoulders",
-        // back
-        "erector spinae": "back",
-        "latissimus dorsi": "back",
-        "trapezius": "back",
-        // legs
-        "gastrocnemius": "legs",
-        "soleus": "legs",
-        "glutaeus maximus": "legs",
-        "ischiocrural muscles": "legs",
-        "quadriceps": "legs",
-        // chest
-        "pectoralis major": "chest"
+        // 腹筋
+        "abdominals": "腹筋",
+        "obliques": "腹筋",
+        // 腕
+        "biceps brachii": "腕",
+        "triceps brachii": "腕",
+        // 肩
+        "deltoid": "肩",
+        // 背中
+        "erector spinae": "背中",
+        "latissimus dorsi": "背中",
+        "trapezius": "背中",
+        // 脚
+        "gastrocnemius": "脚",
+        "soleus": "脚",
+        "glutaeus maximus": "脚",
+        "ischiocrural muscles": "脚",
+        "quadriceps": "脚",
+        // 胸
+        "pectoralis major": "胸"
     ]
 }
 
@@ -101,11 +101,11 @@ extension Exercise {
         public var title: String {
             switch self {
             case .barbell:
-                return "barbell based"
+                return "バーベル"
             case .dumbbell:
-                return "dumbbell based"
+                return "ダンベル"
             case .other:
-                return "other"
+                return "その他"
             }
         }
         

@@ -13,19 +13,19 @@ struct ActivityCalendarViewCell: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Activity")
+            Text("アクティビティ")
                 .bold()
                 .font(.subheadline)
                 .foregroundColor(.accentColor)
-            
+
             HStack {
-                Text("Workouts Last 28 Days")
+                Text("過去28日間のワークアウト")
                     .font(.headline)
-                
+
                 Spacer()
-                
+
                 if let workoutsLast28Days = workoutsLast28Days {
-                    Text("\(workoutsLast28Days) workouts")
+                    Text("\(workoutsLast28Days)回")
                         .foregroundColor(.secondary)
                 }
             }
