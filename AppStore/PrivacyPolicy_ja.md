@@ -2,7 +2,7 @@
 
 **Nan Ton? プライバシーポリシー**
 
-最終更新日: 2024年12月
+最終更新日: 2025年1月
 
 ---
 
@@ -106,4 +106,4 @@ Nan Ton?（以下「本アプリ」）は、ユーザーのプライバシーを
 
 ---
 
-*© 2024 Nan Ton? All rights reserved.*
+*© 2025 Nan Ton? All rights reserved.*
